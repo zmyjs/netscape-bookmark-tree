@@ -1,0 +1,15 @@
+{
+    "name": "kfc-thanksgiving-wx",
+    "version": "0.11.23",
+    "description": "KFC 感恩节活动",
+    "private": true,
+    "scripts": {
+        "start": "gulp"
+    },
+    "devDependencies": {
+        "gulp": "^4.0.0",
+        "gulp-ejs": "^3.2.0",
+        "gulp-htmlmin": "^5.0.1",
+        "rimraf": "^2.6.2"
+    }
+}
