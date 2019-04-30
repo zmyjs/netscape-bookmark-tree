@@ -1,15 +1,16 @@
 {
-    "name": "kfc-thanksgiving-wx",
+    "name": "bookmark",
     "version": "0.11.23",
-    "description": "KFC 感恩节活动",
+    "description": "书签页",
     "private": true,
     "scripts": {
-        "start": "gulp"
+        "start": "node build"
     },
     "devDependencies": {
-        "gulp": "^4.0.0",
-        "gulp-ejs": "^3.2.0",
-        "gulp-htmlmin": "^5.0.1",
-        "rimraf": "^2.6.2"
+        "rimraf": "^2.6.2",
+        "vue-server-renderer": "^2.6.10"
+    },
+    "dependencies": {
+        "vue": "^2.6.10"
     }
 }
