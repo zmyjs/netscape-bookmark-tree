@@ -1,3 +1,8 @@
+/**
+ * netscape-bookmark-tree
+ */
+'use strict';
+
 const reg = /(<DT><H3[\s\S]+?>([\s\S]+?)<\/H3>\s*)?<DL><p>([\s\S]+)<\/DL><p>|<DT><A[\s\S]+?HREF="(\S+)"[\s\S]+?ICON="(\S+)">([\s\S]+?)<\/A>/g;
 
 function exec(reg, str) {
@@ -44,7 +49,9 @@ function treeEach(tree, callback) {
     return tree;
 }
 
-module.exports = {
+var index = {
     get: getNodes,
     each: treeEach
 };
+
+module.exports = index;

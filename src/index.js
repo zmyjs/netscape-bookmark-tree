@@ -44,7 +44,7 @@ function treeEach(tree, callback) {
     return tree;
 }
 
-module.exports = {
+export default {
     get: getNodes,
     each: treeEach
 };
