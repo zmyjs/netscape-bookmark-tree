@@ -1,8 +1,11 @@
 # NETSCAPE-Bookmark-tree
 
-把 NETSCAPE-Bookmark-file-1 格式书签转换成 js 树形数据（数组）。
+把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
 
 ## NETSCAPE-Bookmark-file-1 书签
+
+Chrome 导出的书签就是这种格式，文件开头为：
+
 ```
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
 <!-- This is an automatically generated file.
@@ -13,21 +16,52 @@
 <H1>Bookmarks</H1>
 ```
 
+格式相关文档：
+
+https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85)
+
 ## 转换后的树形数据
+
+一个普通的**JavaScript**数组，每一个元素都是对象。
 
 ```
 [
     {
-        name: 'dir',
-        children: [
-            { name: 'node-1', icon: 'xxx', href: 'www.xxx.com' },
-            { name: 'node-2', icon: 'xxx', href: 'www.xxx.com' }
+        "name": "root",
+        "children": [
+            {
+                "name": "书签栏",
+                "children": [
+                    {
+                        "href": "https://github.com/",
+                        "icon": "data:image/png;base64,iVB...",
+                        "name": "GitHub"
+                    },
+                    {
+                        "href": "https://gitlab.com/",
+                        "icon": "data:image/png;base64,iVB...",
+                        "name": "GitLab"
+                    },
+                    {
+                        "href": "https://gitee.com/",
+                        "icon": "data:image/png;base64,iVB...",
+                        "name": "码云"
+                    },
+                    {
+                        "href": "https://developer.mozilla.org/zh-CN/docs/Web/API",
+                        "icon": "data:image/png;base64,iVB...",
+                        "name": "MDN"
+                    }
+                ]
+            }
         ]
     }
 ]
 ```
 
-## api
+## Api
+
+只有一个函数：
 
 ```
 fn(
