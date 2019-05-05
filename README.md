@@ -2,6 +2,34 @@
 
 把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
 
+## API
+
+只有一个函数：
+
+```
+fn(
+string,
+{
+    href: 'href',
+    icon: 'icon',
+    name: 'name',
+    children: 'children',
+    each: identity
+}
+);
+```
+
+## 示例
+
+```
+const fs = require("fs");
+let content = fs.readFileSync('bookmarks.html', 'utf8');
+let tree = nbTree(content);
+console.log(tree);
+```
+
+[Demo](https://kobezhu.github.io/netscape-bookmark-tree/example)
+
 ## NETSCAPE-Bookmark-file-1 书签
 
 Chrome 导出的书签就是这种格式，文件开头为：
@@ -57,21 +85,4 @@ https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-
         ]
     }
 ]
-```
-
-## Api
-
-只有一个函数：
-
-```
-fn(
-string,
-{
-    href: 'href',
-    icon: 'icon',
-    name: 'name',
-    children: 'children',
-    each: identity
-}
-);
 ```
