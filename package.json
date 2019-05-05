@@ -1,8 +1,13 @@
 {
     "name": "netscape-bookmark-tree",
-    "version": "0.1.1",
+    "author": "ZMY",
+    "keywords": [
+        "bookmark",
+        "NETSCAPE-Bookmark"
+    ],
+    "homepage": "https://kobezhu.github.io/netscape-bookmark-tree/example",
+    "version": "0.1.5",
     "description": "NETSCAPE-Bookmark-file-1",
-    "private": true,
     "scripts": {
         "build": "rollup -c",
         "example": "node example/build",
@@ -13,5 +18,12 @@
         "rollup-plugin-clear": "^2.0.7",
         "vue": "^2.6.10",
         "vue-server-renderer": "^2.6.10"
+    },
+    "main": "dist/netscape-bookmark-tree.cjs.js",
+    "module": "dist/netscape-bookmark-tree.es.js",
+    "browser": "dist/netscape-bookmark-tree.iife.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/kobezhu/netscape-bookmark-tree.git"
     }
 }
