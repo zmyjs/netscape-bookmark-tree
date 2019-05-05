@@ -1,6 +1,7 @@
 {
     "name": "netscape-bookmark-tree",
     "author": "ZMY",
+    "license": "MIT",
     "keywords": [
         "bookmark",
         "NETSCAPE-Bookmark"
@@ -25,5 +26,8 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/kobezhu/netscape-bookmark-tree.git"
+    },
+    "bugs": {
+        "url": "https://github.com/kobezhu/netscape-bookmark-tree/issues"
     }
 }
