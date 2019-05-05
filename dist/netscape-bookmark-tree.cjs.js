@@ -1,4 +1,22 @@
-import * as utils from './utils';
+/**
+ * netscape-bookmark-tree v0.1.0
+ * Build 1557024354952
+ * Zhu MaoYan
+ */
+
+'use strict';
+
+function exec(reg, str) {
+    let match, result = [];
+    while (match = reg.exec(str)) {
+        result.push(match);
+    }
+    return result;
+}
+
+function identity(p) {
+    return p;
+}
 
 function main(str, option) {
     const reg = /(<DT><H3[\s\S]+?>([\s\S]+?)<\/H3>\s*)?<DL><p>([\s\S]+)<\/DL><p>|<DT><A[\s\S]+?HREF="(\S+)"[\s\S]+?ICON="(\S+)">([\s\S]+?)<\/A>/g;
@@ -8,10 +26,10 @@ function main(str, option) {
         icon: 'icon',
         name: 'name',
         children: 'children',
-        each: utils.identity
+        each: identity
     }, option);
 
-    return utils.exec(reg, str).map(function (match) {
+    return exec(reg, str).map(function (match) {
         const childStr = match[3];
         let node = {
             id: match.index
@@ -30,4 +48,4 @@ function main(str, option) {
     });
 }
 
-export default main;
+module.exports = main;

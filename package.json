@@ -1,17 +1,17 @@
 {
-    "name": "bookmark",
-    "version": "0.11.23",
-    "description": "书签页",
+    "name": "netscape-bookmark-tree",
+    "version": "0.1.0",
+    "description": "NETSCAPE-Bookmark-file-1",
     "private": true,
     "scripts": {
-        "start": "rollup -c"
+        "build": "rollup -c",
+        "example": "node example/build",
+        "start": "npm run bulid & npm example"
     },
     "devDependencies": {
         "rollup": "^1.10.1",
         "rimraf": "^2.6.2",
-        "vue-server-renderer": "^2.6.10"
-    },
-    "dependencies": {
+        "vue-server-renderer": "^2.6.10",
         "vue": "^2.6.10"
     }
 }

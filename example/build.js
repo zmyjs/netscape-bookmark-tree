@@ -1,12 +1,18 @@
 const fs = require("fs");
+const path = require("path");
 const Vue = require('vue');
 const Renderer = require('vue-server-renderer');
-const NBTree = require('./netscape-bookmark-tree');
+const nbTree = require('../dist/netscape-bookmark-tree.cjs');
 
-let content = fs.readFileSync('src/bookmarks.html', 'utf8');
+let filePath = {
+    content: path.join(__dirname, 'bookmarks.html'),
+    template: path.join(__dirname, 'template.html'),
+}
+
+let content = fs.readFileSync(filePath.content, 'utf8');
 content = content.replace(/<\![\s\S]+H1>/g, '');
 
-let tree = NBTree.get(content);
+let tree = nbTree(content);
 
 const app = new Vue({
     render(h) {
@@ -32,10 +38,10 @@ const app = new Vue({
     }
 });
 
-let template = fs.readFileSync('src/index.html', 'utf8');
+let template = fs.readFileSync(filePath.template, 'utf8');
 const renderer = Renderer.createRenderer({ template });
 
 renderer.renderToString(app, function (err, html) {
     if (err) throw err
-    fs.writeFileSync('dist/index.html', html, 'utf8');
+    fs.writeFileSync('index.html', html, 'utf8');
 });

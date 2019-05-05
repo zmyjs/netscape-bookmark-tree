@@ -1,30 +1,34 @@
-const banner = `/**
- * netscape-bookmark-tree
- */`;
+import { version } from './package.json';
 
-export default {
+const banner = `/**
+ * netscape-bookmark-tree v${version}
+ * Build ${Date.now()}
+ * Zhu MaoYan
+ */
+`;
+
+const config = {
     input: 'src/index.js',
     output: [
         {
-            file: 'dist/es.js',
             format: 'es',
-            banner,
         },
         {
-            file: 'dist/cjs.js',
             format: 'cjs',
-            banner,
         },
         {
-            file: 'dist/amd.js',
             format: 'amd',
-            banner,
         },
         {
             name: 'bookmark',
-            file: 'dist/iife.js',
             format: 'iife',
-            banner,
         }
     ]
 };
+
+config.output.forEach(function (v) {
+    v.banner = banner;
+    v.file = `dist/netscape-bookmark-tree.${v.format}.js`;
+});
+
+export default config;
