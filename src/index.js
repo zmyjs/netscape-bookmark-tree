@@ -1,17 +1,10 @@
 import * as utils from './utils';
 
-function main(str, option) {
-    const reg = /(<DT><H3[\s\S]+?>([\s\S]+?)<\/H3>\s*)?<DL><p>([\s\S]+)<\/DL><p>|<DT><A[\s\S]+?HREF="(\S+)"[\s\S]+?ICON="(\S+)">([\s\S]+?)<\/A>/g;
+const regWrap = /<DL><p>([\s\S]+)<\/DL><p>/;
+const reg = /(\s+)<DT><H3[\s\S]+?>([\s\S]+?)<\/H3>\1<DL><p>([\s\S]+?)\1<\/DL><p>|<DT><A[\s\S]+?HREF="(\S+)"[\s\S]+?ICON="(\S+)">([\s\S]+?)<\/A>/g;
 
-    option = Object.assign({
-        href: 'href',
-        icon: 'icon',
-        name: 'name',
-        children: 'children',
-        each: utils.identity
-    }, option);
-
-    return utils.exec(reg, str).map(function (match) {
+function main(string, option) {
+    return utils.exec(reg, string).map(function (match) {
         const childStr = match[3];
         let node = {
             id: match.index
@@ -19,7 +12,7 @@ function main(str, option) {
 
         if (childStr) {
             node[option.name] = match[2];
-            node[option.children] = main(childStr);
+            node[option.children] = main(childStr, option);
         } else {
             node[option.href] = match[4];
             node[option.icon] = match[5];
@@ -30,4 +23,18 @@ function main(str, option) {
     });
 }
 
-export default main;
+export default function (str, opt) {
+    let match = str.match(regWrap);
+    if (!match) return match;
+
+    let string = match[1],
+        option = Object.assign({
+            href: 'href',
+            icon: 'icon',
+            name: 'name',
+            children: 'children',
+            each: utils.identity
+        }, opt);
+
+    return main(string, option);
+}

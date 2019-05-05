@@ -1,22 +1,21 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 const Vue = require('vue');
 const Renderer = require('vue-server-renderer');
 const nbTree = require('../dist/netscape-bookmark-tree.cjs');
 
-let filePath = {
-    content: path.join(__dirname, 'bookmarks.html'),
+const filePath = {
+    content: path.join(__dirname, 'bookmarks_2019_5_5.html'),
     template: path.join(__dirname, 'template.html'),
-}
+    index: path.join(__dirname, 'index.html'),
+};
 
 let content = fs.readFileSync(filePath.content, 'utf8');
-content = content.replace(/<\![\s\S]+H1>/g, '');
-
 let tree = nbTree(content);
 
 const app = new Vue({
     render(h) {
-        function ol(tree) {
+        function renderList(tree, data) {
             let slots = tree.map(function (node) {
                 const children = node.children;
                 let liSlots = [];
@@ -25,16 +24,22 @@ const app = new Vue({
 
                 if (children) {
                     liSlots.push(h('span', node.name));
-                    liSlots.push(ol(children));
+                    liSlots.push(renderList(children, data));
                 } else {
                     liSlots.push(h('a', { attrs: { href: node.href } }, node.name));
                 }
                 return h('li', liSlots);
             });
-            return h('ol', slots);
+            return h('ol', data, slots);
         }
 
-        return h('div', { attrs: { id: 'root' } }, [ol(tree[0].children)]);
+        return h('div', { attrs: { id: 'app' }, class: 'container-fluid' }, [
+            h('div', { class: 'row' }, [
+                renderList(tree, { class: 'col' }),
+                h('pre', { class: 'col' }, JSON.stringify(tree, null, '    '))
+            ])
+        ]);
+
     }
 });
 
@@ -42,6 +47,6 @@ let template = fs.readFileSync(filePath.template, 'utf8');
 const renderer = Renderer.createRenderer({ template });
 
 renderer.renderToString(app, function (err, html) {
-    if (err) throw err
-    fs.writeFileSync('index.html', html, 'utf8');
+    if (err) throw err;
+    fs.writeFileSync(filePath.index, html, 'utf8');
 });

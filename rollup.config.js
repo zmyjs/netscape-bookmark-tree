@@ -1,3 +1,4 @@
+import clear from 'rollup-plugin-clear';
 import { version } from './package.json';
 
 const banner = `/**
@@ -9,6 +10,9 @@ const banner = `/**
 
 const config = {
     input: 'src/index.js',
+    plugin: [
+        clear({ targets: ['dist'] })
+    ],
     output: [
         {
             format: 'es',

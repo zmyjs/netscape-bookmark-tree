@@ -22,7 +22,9 @@ string,
 ## 示例
 
 ```
-const fs = require("fs");
+const fs = require('fs');
+const nbTree = require('../dist/netscape-bookmark-tree.cjs');
+
 let content = fs.readFileSync('bookmarks.html', 'utf8');
 let tree = nbTree(content);
 console.log(tree);
