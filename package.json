@@ -1,5 +1,6 @@
 {
     "name": "netscape-bookmark-tree",
+    "version": "0.1.6",
     "author": "ZMY",
     "license": "MIT",
     "keywords": [
@@ -7,7 +8,6 @@
         "NETSCAPE-Bookmark"
     ],
     "homepage": "https://kobezhu.github.io/netscape-bookmark-tree/example",
-    "version": "0.1.5",
     "description": "NETSCAPE-Bookmark-file-1",
     "scripts": {
         "build": "rollup -c",
