@@ -33,11 +33,14 @@ const app = new Vue({
             return h('ol', data, slots);
         }
 
-        return h('div', { attrs: { id: 'app' }, class: 'container-fluid' }, [
-            h('div', { class: 'row' }, [
-                renderList(tree, { class: 'col' }),
-                h('pre', { class: 'col' }, JSON.stringify(tree, null, '    '))
-            ])
+        return h('div', { attrs: { id: 'app' } }, [
+            h('h1', 'NETSCAPE-Bookmark-tree'),
+            h('h2', '渲染示例'),
+            renderList(tree),
+            h('h2', '转换后数据'),
+            h('pre', JSON.stringify(tree, null, '    ')),
+            h('h2', '源数据'),
+            h('pre', content)
         ]);
 
     }
