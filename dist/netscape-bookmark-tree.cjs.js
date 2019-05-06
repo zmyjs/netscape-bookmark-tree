@@ -1,6 +1,6 @@
 /**
- * netscape-bookmark-tree v0.1.1
- * Build 1557041942979
+ * netscape-bookmark-tree v0.2.0
+ * Build 1557111095111
  * Zhu MaoYan
  */
 
@@ -19,24 +19,29 @@ function identity(p) {
     return p;
 }
 
-const regWrap = /<DL><p>([\s\S]+)<\/DL><p>/;
-const reg = /(\s+)<DT><H3[\s\S]+?>([\s\S]+?)<\/H3>\1<DL><p>([\s\S]+?)\1<\/DL><p>|<DT><A[\s\S]+?HREF="(\S+)"[\s\S]+?ICON="(\S+)">([\s\S]+?)<\/A>/g;
+const regWrap = /<DL><p>([\s\S]+)<\/DL>/,
+    reg = /(\s+)<DT><H3([\s\S]+?)>([\s\S]+?)<\/H3>\1<DL><p>([\s\S]+?)\1<\/DL><p>|<DT><A([\s\S]+?)>([\s\S]+?)<\/A>/g,
+    regAttr = /(\S+)="(\S+)"/g;
 
 function main(string, option) {
     return exec(reg, string).map(function (match) {
-        const childStr = match[3];
-        let node = {
-            id: match.index
-        };
+        let node = { id: match.index };
+        let childStr = match[4], attrStr;
 
         if (childStr) {
-            node[option.name] = match[2];
+            attrStr = match[2];
+            node[option.name] = match[3];
             node[option.children] = main(childStr, option);
         } else {
-            node[option.href] = match[4];
-            node[option.icon] = match[5];
+            attrStr = match[5];
             node[option.name] = match[6];
         }
+
+        exec(regAttr, attrStr)
+            .map(function (attrMatch) {
+                const key = attrMatch[1].toLowerCase();
+                node[key] = attrMatch[2];
+            });
 
         return option.each(node, match);
     });

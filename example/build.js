@@ -20,14 +20,15 @@ const app = new Vue({
                 const children = node.children;
                 let liSlots = [];
                 if (node.icon)
-                    liSlots.push(h('img', { attrs: { src: node.icon } }));
+                    liSlots.push(h('img', { attrs: { src: node.icon, width: 16 } }));
 
                 if (children) {
-                    liSlots.push(h('span', node.name));
+                    liSlots.push(h('strong', node.name));
                     liSlots.push(renderList(children, data));
                 } else {
                     liSlots.push(h('a', { attrs: { href: node.href } }, node.name));
                 }
+
                 return h('li', liSlots);
             });
             return h('ol', data, slots);
