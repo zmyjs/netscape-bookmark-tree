@@ -39,7 +39,7 @@ const app = new Vue({
                 'NETSCAPE-Bookmark-tree',
                 h('a', { class: 'ml-5', attrs: { href: 'https://github.com/kobezhu/netscape-bookmark-tree/blob/master/README.md' } }, 'Documentation')
             ]),
-            h('nav', { class: 'my-5' }, [
+            h('nav', { class: 'my-5 bg-white sticky-top' }, [
                 h('h2', 'Navigation'),
                 h('a', { class: 'mr-5', attrs: { href: '#render' } }, 'Sample rendering'),
                 h('a', { class: 'mr-5', attrs: { href: '#array' } }, 'Result'),
@@ -57,9 +57,7 @@ const app = new Vue({
                 h('h2', 'Source data'),
                 h('pre', content)
             ]),
-            h('section', [
-                h('a', { attrs: { href: '#app' } }, 'Top'),
-            ])
+            h('footer', { class: 'text-center' }, '©ZMY')
         ]);
 
     }
