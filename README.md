@@ -2,39 +2,37 @@
 
 把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
 
-## API
+[Demo](https://kobezhu.github.io/netscape-bookmark-tree/example)
 
-只有一个函数：
-
-```
-fn(
-string,
-{
-    href: 'href',
-    icon: 'icon',
-    name: 'name',
-    children: 'children',
-    each: identity
-}
-);
-```
-
-## 示例
+## 起步
 
 ```
 const fs = require('fs');
-const nbTree = require('../dist/netscape-bookmark-tree.cjs');
+const bookmark = require('../dist/netscape-bookmark-tree.cjs');
 
 let content = fs.readFileSync('bookmarks.html', 'utf8');
-let tree = nbTree(content);
+let tree = bookmark(content);
+
 console.log(tree);
 ```
 
-[Demo](https://kobezhu.github.io/netscape-bookmark-tree/example)
+## API
 
-## NETSCAPE-Bookmark-file-1 书签
+只有一个函数，函数返回数组。
 
-Chrome 导出的书签就是这种格式，文件开头为：
+```
+/**
+ * @param {String} string 书签的文本
+ * @param {Object} option 配置选项
+ */
+bookmark(string, option);
+```
+
+### 参数
+
+1. string
+
+NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签就是这种格式，文件开头为：
 
 ```
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
@@ -50,9 +48,26 @@ Chrome 导出的书签就是这种格式，文件开头为：
 
 https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85)
 
-## 转换后的树形数据
+2. option
 
-一个普通的**JavaScript**数组，每一个元素都是对象。
+默认值：
+```
+{
+    // 显示键名
+    name: 'name',
+    // 子节点键名
+    children: 'children',
+    // 每个节点都会调用该函数，必须返回节点对象，函数签名：each(node, match)
+    each: utils.identity
+}
+```
+
+
+### 返回
+
+如果传入的字符串符合格式，会返回转换后的树形数据，一个普通的**JavaScript**数组，每一个元素都是对象。
+
+如果不符合格式，返回`null`。
 
 ```
 [
