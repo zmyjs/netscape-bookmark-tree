@@ -2,13 +2,32 @@
 
 把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
 
+Parse a **NETSCAPE-Bookmark-file-1** style bookmarks string into nested array.
+
 [Demo](https://kobezhu.github.io/netscape-bookmark-tree/example)
 
-## 起步
+## Installation
+
+NPM
+
+```
+npm install netscape-bookmark-tree
+```
+
+In the **dist/** directory of the NPM package you will find many different builds.
+Here’s an overview of the difference between them:
+
+- amd – Asynchronous Module Definition, used with module loaders like RequireJS
+- system – Native format of the SystemJS loader
+- cjs – CommonJS, suitable for Node and other bundlers
+- esm – Keep the bundle as an ES module file, suitable for other bundlers and inclusion as a `<script type=module>` tag in modern browsers
+- iife – A self-executing function, suitable for inclusion as a `<script>` tag. use global variable `bookmark` to access the exports of your bundle.
+
+## Quick start
 
 ```
 const fs = require('fs');
-const bookmark = require('../dist/netscape-bookmark-tree.cjs');
+const bookmark = require('netscape-bookmark-tree');
 
 let content = fs.readFileSync('bookmarks.html', 'utf8');
 let tree = bookmark(content);
@@ -18,17 +37,17 @@ console.log(tree);
 
 ## API
 
-只有一个函数，函数返回数组。
+The module is very simple, and has only one method, the method returns an array.
 
 ```
 /**
- * @param {String} string 书签的文本
- * @param {Object} option 配置选项
+ * @param {String} string Bookmark text
+ * @param {Object} option Configuration Options
  */
 bookmark(string, option);
 ```
 
-### 参数
+### Parameters
 
 1. string
 
@@ -44,13 +63,11 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 <H1>Bookmarks</H1>
 ```
 
-格式相关文档：
-
-https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85)
+[Netscape Bookmark File Format](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85))
 
 2. option
 
-默认值：
+Default
 ```
 {
     // 显示键名
@@ -63,7 +80,7 @@ https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-
 ```
 
 
-### 返回
+### Return
 
 如果传入的字符串符合格式，会返回转换后的树形数据，一个普通的**JavaScript**数组，每一个元素都是对象。
 

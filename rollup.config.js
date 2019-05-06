@@ -11,13 +11,16 @@ const config = {
     input: 'src/index.js',
     output: [
         {
-            format: 'es',
+            format: 'esm',
         },
         {
             format: 'cjs',
         },
         {
             format: 'amd',
+        },
+        {
+            format: 'system',
         },
         {
             name: 'bookmark',
@@ -28,7 +31,7 @@ const config = {
 
 config.output.forEach(function (v) {
     v.banner = banner;
-    v.file = `dist/netscape-bookmark-tree.${v.format}.js`;
+    v.file = `dist/bookmark.${v.format}.js`;
 });
 
 export default config;

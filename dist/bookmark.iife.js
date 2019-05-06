@@ -1,6 +1,6 @@
 /**
  * netscape-bookmark-tree v0.2.0
- * Build 1557112493838
+ * Build 1557119380566
  * Zhu MaoYan
  */
 
@@ -31,6 +31,7 @@ var bookmark = (function () {
      * 主转换函数
      * @param {String} string 书签的文本
      * @param {Object} option 配置选项
+     * @returns {Array}
      */
     function main(string, option) {
         return exec(reg, string).map(function (match) {
@@ -60,6 +61,7 @@ var bookmark = (function () {
      * 入口函数
      * @param {String} str 书签的文本
      * @param {Object} opt 配置选项
+     * @returns {Array}
      */
     function index (str, opt) {
         let match = str.match(regWrap);

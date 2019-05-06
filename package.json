@@ -11,17 +11,16 @@
     "description": "NETSCAPE-Bookmark-file-1",
     "scripts": {
         "build": "rollup -c",
-        "example": "node example/build",
-        "start": "npm run bulid & npm example"
+        "example": "node example/build"
     },
     "devDependencies": {
         "rollup": "^1.10.1",
         "vue": "^2.6.10",
         "vue-server-renderer": "^2.6.10"
     },
-    "main": "dist/netscape-bookmark-tree.cjs.js",
-    "module": "dist/netscape-bookmark-tree.es.js",
-    "browser": "dist/netscape-bookmark-tree.iife.js",
+    "main": "dist/bookmark.cjs.js",
+    "module": "dist/bookmark.esm.js",
+    "browser": "dist/bookmark.iife.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/kobezhu/netscape-bookmark-tree.git"

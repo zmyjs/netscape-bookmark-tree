@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Vue = require('vue');
 const Renderer = require('vue-server-renderer');
-const bookmark = require('../dist/netscape-bookmark-tree.cjs');
+const bookmark = require('../dist/bookmark.cjs');
 
 const filePath = {
     content: path.join(__dirname, 'bookmarks_2019_5_5.html'),
@@ -37,18 +37,18 @@ const app = new Vue({
         return h('div', { class: 'p-3', attrs: { id: 'app' } }, [
             h('h1', [
                 'NETSCAPE-Bookmark-tree',
-                h('a', { class: 'ml-5', attrs: { href: 'https://github.com/kobezhu/netscape-bookmark-tree/blob/master/README.md' } }, '文档')
+                h('a', { class: 'ml-5', attrs: { href: 'https://github.com/kobezhu/netscape-bookmark-tree/blob/master/README.md' } }, 'Document')
             ]),
             h('section', { class: 'my-5' }, [
-                h('h2', '渲染示例'),
+                h('h2', 'Sample rendering'),
                 renderList(tree)
             ]),
             h('section', { class: 'mb-5' }, [
-                h('h2', '转换后数据'),
+                h('h2', 'Result'),
                 h('pre', JSON.stringify(tree, null, '    '))
             ]),
             h('section', [
-                h('h2', '源数据'),
+                h('h2', 'Source data'),
                 h('pre', content)
             ])
         ]);

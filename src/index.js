@@ -11,6 +11,7 @@ const regAttr = /(\S+)="(\S+)"/g;
  * 主转换函数
  * @param {String} string 书签的文本
  * @param {Object} option 配置选项
+ * @returns {Array}
  */
 function main(string, option) {
     return utils.exec(reg, string).map(function (match) {
@@ -40,6 +41,7 @@ function main(string, option) {
  * 入口函数
  * @param {String} str 书签的文本
  * @param {Object} opt 配置选项
+ * @returns {Array}
  */
 export default function (str, opt) {
     let match = str.match(regWrap);
