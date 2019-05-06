@@ -37,7 +37,7 @@ const app = new Vue({
         return h('div', { class: 'p-3', attrs: { id: 'app' } }, [
             h('h1', [
                 'NETSCAPE-Bookmark-tree',
-                h('a', { class: 'ml-5', attrs: { href: 'https://github.com/kobezhu/netscape-bookmark-tree/blob/master/README.md' } }, 'Document')
+                h('a', { class: 'ml-5', attrs: { href: 'https://github.com/kobezhu/netscape-bookmark-tree/blob/master/README.md' } }, 'Documentation')
             ]),
             h('nav', { class: 'my-5' }, [
                 h('h2', 'Navigation'),

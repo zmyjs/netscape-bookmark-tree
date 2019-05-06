@@ -37,12 +37,6 @@ function main(string, option) {
     });
 }
 
-/**
- * 入口函数
- * @param {String} str 书签的文本
- * @param {Object} opt 配置选项
- * @returns {Array}
- */
 export default function (str, opt) {
     let match = str.match(regWrap);
     if (!match) return match;

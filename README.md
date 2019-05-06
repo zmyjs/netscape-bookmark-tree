@@ -67,7 +67,6 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 
 2. option
 
-Default
 ```
 {
     // 显示键名
@@ -79,11 +78,9 @@ Default
 }
 ```
 
+### Returns
 
-### Return
-
-如果传入的字符串符合格式，会返回转换后的树形数据，一个普通的**JavaScript**数组，每一个元素都是对象。
-
+如果传入的字符串符合格式，会返回转换后的树形数据（一个普通的**JavaScript**数组，每一个元素都是对象）。
 如果不符合格式，返回`null`。
 
 ```
@@ -120,3 +117,7 @@ Default
     }
 ]
 ```
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
