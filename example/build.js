@@ -39,17 +39,26 @@ const app = new Vue({
                 'NETSCAPE-Bookmark-tree',
                 h('a', { class: 'ml-5', attrs: { href: 'https://github.com/kobezhu/netscape-bookmark-tree/blob/master/README.md' } }, 'Document')
             ]),
-            h('section', { class: 'my-5' }, [
+            h('nav', { class: 'my-5' }, [
+                h('h2', 'Navigation'),
+                h('a', { class: 'mr-5', attrs: { href: '#render' } }, 'Sample rendering'),
+                h('a', { class: 'mr-5', attrs: { href: '#array' } }, 'Result'),
+                h('a', { class: 'mr-5', attrs: { href: '#source' } }, 'Source data')
+            ]),
+            h('section', { attrs: { id: 'render' }, class: 'mb-5' }, [
                 h('h2', 'Sample rendering'),
                 renderList(tree)
             ]),
-            h('section', { class: 'mb-5' }, [
+            h('section', { attrs: { id: 'array' }, class: 'mb-5' }, [
                 h('h2', 'Result'),
                 h('pre', JSON.stringify(tree, null, '    '))
             ]),
-            h('section', [
+            h('section', { attrs: { id: 'source' }, class: 'mb-5' }, [
                 h('h2', 'Source data'),
                 h('pre', content)
+            ]),
+            h('section', [
+                h('a', { attrs: { href: '#app' } }, 'Top'),
             ])
         ]);
 
