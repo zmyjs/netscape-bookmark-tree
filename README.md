@@ -86,34 +86,20 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 ```
 [
     {
-        "name": "root",
+        "id": 0,
+        "name": "书签栏",
         "children": [
             {
-                "name": "书签栏",
-                "children": [
-                    {
-                        "href": "https://github.com/",
-                        "icon": "data:image/png;base64,iVB...",
-                        "name": "GitHub"
-                    },
-                    {
-                        "href": "https://gitlab.com/",
-                        "icon": "data:image/png;base64,iVB...",
-                        "name": "GitLab"
-                    },
-                    {
-                        "href": "https://gitee.com/",
-                        "icon": "data:image/png;base64,iVB...",
-                        "name": "码云"
-                    },
-                    {
-                        "href": "https://developer.mozilla.org/zh-CN/docs/Web/API",
-                        "icon": "data:image/png;base64,iVB...",
-                        "name": "MDN"
-                    }
-                ]
+                "id": 10,
+                "name": "GitHub",
+                "href": "https://github.com/",
+                "add_date": "1548396453",
+                "icon": "data:image/png;base64,iV..."
             }
-        ]
+        ],
+        "add_date": "1534832849",
+        "last_modified": "1557029578",
+        "personal_toolbar_folder": "true"
     }
 ]
 ```
