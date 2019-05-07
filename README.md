@@ -74,7 +74,7 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
     // 子节点键名
     children: 'children',
     // 每个节点都会调用该函数，必须返回节点对象，函数签名：each(node, match)
-    each: utils.identity
+    each: n => n
 }
 ```
 
