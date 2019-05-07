@@ -120,4 +120,4 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 
 ## License
 
-[MIT](http://opensource.org/licenses/MIT)
+[MIT](LICENSE)
