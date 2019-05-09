@@ -1,5 +1,4 @@
 import { version } from './package.json';
-import { terser } from 'rollup-plugin-terser';
 
 const banner = `/**
  * netscape-bookmark-tree v${version}
@@ -27,8 +26,7 @@ const config = {
             name: 'bookmark',
             format: 'iife',
         }
-    ],
-    // plugins: [terser()]
+    ]
 };
 
 config.output.forEach(function (v) {

@@ -1,5 +1,7 @@
 # NETSCAPE-Bookmark-tree
 
+[![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
+
 把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
 
 Parse a **NETSCAPE-Bookmark-file-1** style bookmarks string into nested array.

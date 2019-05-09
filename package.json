@@ -8,7 +8,7 @@
         "NETSCAPE-Bookmark"
     ],
     "homepage": "https://kobezhu.github.io/netscape-bookmark-tree/example",
-    "description": "NETSCAPE-Bookmark-file-1",
+    "description": "Parse a 'NETSCAPE-Bookmark-file-1' style bookmarks string into nested array",
     "scripts": {
         "build": "rollup -c",
         "example": "node example/build"
