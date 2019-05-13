@@ -2,30 +2,29 @@
 
 [![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
 
+把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
 
-Parse a **NETSCAPE-Bookmark-file-1** style bookmarks string into nested array.
 
-[中文](README-CN.md)
-[Example](https://kobezhu.github.io/netscape-bookmark-tree/example)
+[English](README.md)
+[示例](https://kobezhu.github.io/netscape-bookmark-tree/example)
 
-## Installation
+## 安装
 
-NPM
+一般情况下，通过NPM安装：
 
 ```
 npm install netscape-bookmark-tree
 ```
 
-In the **dist/** directory of the NPM package you will find many different builds.
-Here’s an overview of the difference between them:
+在NPM包的**dist/**目录包含多种构建版本，它们区别如下：
 
-- cjs – CommonJS, suitable for Node and other bundlers
-- esm – Keep the bundle as an ES module file, suitable for other bundlers and inclusion as a `<script type=module>` tag in modern browsers
-- iife – A self-executing function, suitable for inclusion as a `<script>` tag. use global variable `bookmark` to access the exports of your bundle.
-- amd – Asynchronous Module Definition, used with module loaders like RequireJS
-- system – Native format of the SystemJS loader
+- cjs – CommonJS，用于Node.js和其他模块打包器
+- esm – ES标准模块，可以通过`<script type=module>`和模块打包器使用
+- iife – 浏览器直接通过`<script>`标签使用，通过全局变量`bookmark`使用
+- amd – AMD模块，RequireJS之类的模块加载器使用
+- system – SystemJS使用
 
-## Quick start
+## 快速开始
 
 ```
 const fs = require('fs');
@@ -39,17 +38,17 @@ console.log(tree);
 
 ## API
 
-The module is very simple, and has only one method, the method returns an array.
+模块很简单，只导出一个函数，接收字符串返回数组。
 
 ```
 /**
- * @param {String} string Bookmark text
- * @param {Object} option Configuration Options
+ * @param {String} string 书签字符串
+ * @param {Object} option 配置
  */
 bookmark(string, option);
 ```
 
-### Parameters
+### 参数
 
 1. string
 
@@ -65,25 +64,25 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 <H1>Bookmarks</H1>
 ```
 
-> [Related documentation](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85))
+> [书签格式相关文档](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85))
 
 2. option
 
 ```
 {
-    // Display key
+    // 显示键名
     name: 'name',
-    // Children key
+    // 子节点键名
     children: 'children',
-    // Invokes function for each node. Signature: each(node, match)
+    // 每个节点都会调用该函数，必须返回节点对象，函数签名：each(node, match)
     each: n => n
 }
 ```
 
-### Returns
+### 返回
 
-If the input parameters are correct, you see the value of the returned result as nested array,
-if not, then return `null`.
+如果传入的字符串符合格式，会返回转换后的树形数据（嵌套的数组）。
+如果不符合格式，返回`null`。
 
 ```
 [
@@ -106,6 +105,6 @@ if not, then return `null`.
 ]
 ```
 
-## License
+## 许可证
 
 [MIT](LICENSE)
