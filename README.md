@@ -53,7 +53,7 @@ bookmark(string, option);
 
 1. string
 
-NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签就是这种格式，文件开头为：
+NETSCAPE-Bookmark-file-1 file format bookmarks string, The file starts with the following text:
 
 ```
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
