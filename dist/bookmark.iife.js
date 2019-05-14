@@ -1,6 +1,6 @@
 /**
- * netscape-bookmark-tree v0.2.1
- * Build 1557125147300
+ * netscape-bookmark-tree v0.3.0
+ * Build 1557809691403
  * Zhu MaoYan
  */
 
@@ -33,42 +33,48 @@ var bookmark = (function () {
      * @param {Object} option 配置选项
      * @returns {Array}
      */
-    function main(string, option) {
-        return exec(reg, string).map(function (match) {
-            let node = { id: match.index };
+    function main(string, option, last) {
+        return exec(reg, string).map(function (match, index) {
+            let node = { id: last + index };
             let childStr = match[4], attrStr;
 
             if (childStr) {
                 attrStr = match[2];
                 node[option.name] = match[3];
-                node[option.children] = main(childStr, option);
+                node[option.children] = main(childStr, option, node.id + option.split);
             } else {
                 attrStr = match[5];
                 node[option.name] = match[6];
             }
 
-            exec(regAttr, attrStr)
-                .map(function (attrMatch) {
-                    const key = attrMatch[1].toLowerCase();
-                    node[key] = attrMatch[2];
-                });
+            exec(regAttr, attrStr).map(function (attrMatch) {
+                const key = attrMatch[1].toLowerCase();
+                node[key] = attrMatch[2];
+            });
 
             return option.each(node, match);
         });
     }
 
-    function index (str, opt) {
-        let match = str.match(regWrap);
-        if (!match) return match;
+    function index (string, option) {
+        const match = string.match(regWrap);
 
-        let string = match[1],
-            option = Object.assign({
+        if (match) {
+            let defaultOption = {
+                // 生成每个节点都会调用，返回新节点，函数签名：each(node, match)
+                each: identity,
+                // 显示键名
                 name: 'name',
+                // 子节点键名
                 children: 'children',
-                each: identity
-            }, opt);
+                // id分割线
+                split: '_'
+            };
+            return main(match[1], Object.assign(defaultOption, option), '');
+        } else {
+            return match;
+        }
 
-        return main(string, option);
     }
 
     return index;

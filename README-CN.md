@@ -70,12 +70,14 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 
 ```
 {
+    // 生成每个节点都会调用，返回新节点，函数签名：each(node, match)
+    each: utils.identity,
     // 显示键名
     name: 'name',
     // 子节点键名
     children: 'children',
-    // 每个节点都会调用该函数，必须返回节点对象，函数签名：each(node, match)
-    each: n => n
+    // ID分割线
+    split: '_'
 }
 ```
 
@@ -87,20 +89,20 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 ```
 [
     {
-        "id": 0,
+        "id": "0",
         "name": "书签栏",
+        "add_date": "1534832849",
+        "last_modified": "1557029578",
+        "personal_toolbar_folder": "true",
         "children": [
             {
-                "id": 10,
+                "id": "0_0",
                 "name": "GitHub",
                 "href": "https://github.com/",
                 "add_date": "1548396453",
                 "icon": "data:image/png;base64,iV..."
             }
-        ],
-        "add_date": "1534832849",
-        "last_modified": "1557029578",
-        "personal_toolbar_folder": "true"
+        ]
     }
 ]
 ```

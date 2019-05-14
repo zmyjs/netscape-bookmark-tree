@@ -71,12 +71,14 @@ NETSCAPE-Bookmark-file-1 file format bookmarks string, The file starts with the 
 
 ```
 {
+    // Invokes function for each node. Signature: each(node, match)
+    each: utils.identity,
     // Display key
     name: 'name',
     // Children key
     children: 'children',
-    // Invokes function for each node. Signature: each(node, match)
-    each: n => n
+    // ID split
+    split: '_'
 }
 ```
 
@@ -88,20 +90,20 @@ if not, then return `null`.
 ```
 [
     {
-        "id": 0,
+        "id": "0",
         "name": "书签栏",
+        "add_date": "1534832849",
+        "last_modified": "1557029578",
+        "personal_toolbar_folder": "true",
         "children": [
             {
-                "id": 10,
+                "id": "0_0",
                 "name": "GitHub",
                 "href": "https://github.com/",
                 "add_date": "1548396453",
                 "icon": "data:image/png;base64,iV..."
             }
-        ],
-        "add_date": "1534832849",
-        "last_modified": "1557029578",
-        "personal_toolbar_folder": "true"
+        ]
     }
 ]
 ```
