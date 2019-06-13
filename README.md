@@ -38,14 +38,8 @@ console.log(tree);
 
 默认模块使用正则进行解释，如果你的书签文件被修改过（压缩、删减标签等），那么可能无法正常识别。
 这个时候需要依赖 [parse5](https://github.com/inikulin/parse5) 解释 AST 进行精细的转换。
-但是这样开销更大。最好不要直接改动书签文件，书签文件头部直接写明了哈：
+但是这样开销更大。最好不要直接改动书签文件，书签文件头部直接写明了哈。
 
-```html
-<!DOCTYPE NETSCAPE-Bookmark-file-1>
-<!-- This is an automatically generated file.
-     It will be read and overwritten.
-     DO NOT EDIT! -->
-```
 
 使用如下：
 
@@ -55,7 +49,7 @@ npm install parse5
 ```
 
 2. 使用 AST 版模块
-```
+```js
 const bookmark = require('netscape-bookmark-tree/dist/bookmark.ast.cjs');
 ```
 其他一样。
@@ -68,7 +62,7 @@ const bookmark = require('netscape-bookmark-tree/dist/bookmark.ast.cjs');
 
 模块很简单，只导出一个函数，接收字符串返回数组。
 
-```
+```js
 /**
  * @param {String} string 书签字符串
  * @param {Object} option 配置
@@ -82,7 +76,7 @@ bookmark(string, option);
 
 NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签就是这种格式，文件开头为：
 
-```
+```html
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
 <!-- This is an automatically generated file.
      It will be read and overwritten.
@@ -96,7 +90,7 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 
 2. option
 
-```
+```js
 {
     // 生成每个节点都会调用，返回新节点，函数签名：each(node, match)
     each: utils.identity,
@@ -114,7 +108,7 @@ NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签
 如果传入的字符串符合格式，会返回转换后的树形数据（嵌套的数组）。
 如果不符合格式，返回`null`。
 
-```
+```json
 [
     {
         "id": "0",

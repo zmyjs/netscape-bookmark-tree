@@ -9,6 +9,7 @@ const regAttr = /(\S+)="(\S+)"/g;
  * 主转换函数
  * @param {String} string 书签的文本
  * @param {Object} option 配置选项
+ * @param {String} last 用于生成id
  * @returns {Array}
  */
 function getChild(string, option, last) {

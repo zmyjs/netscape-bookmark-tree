@@ -1,7 +1,13 @@
 import parse5 from 'parse5';
 import * as utils from './utils';
 
-
+/**
+ * 主转换函数
+ * @param {Array} nodes 节点列表
+ * @param {Object} option 配置选项
+ * @param {String} last 用于生成id
+ * @returns {Array}
+ */
 function getChild(nodes, option, last) {
     let items = [];
 
