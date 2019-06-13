@@ -1,6 +1,6 @@
 {
     "name": "netscape-bookmark-tree",
-    "version": "0.3.0",
+    "version": "1.0.0",
     "author": "ZMY",
     "license": "MIT",
     "keywords": [
@@ -18,15 +18,13 @@
         "@babel/preset-env": "^7.4.5",
         "rollup": "^1.15.2",
         "rollup-plugin-babel": "^4.3.2",
-        "rollup-plugin-commonjs": "^10.0.0",
-        "rollup-plugin-node-resolve": "^5.0.2",
-        "rollup-plugin-terser": "^4.0.4",
+        "rollup-plugin-babel-minify": "^8.0.0",
         "vue": "^2.6.10",
         "vue-server-renderer": "^2.6.10"
     },
-    "main": "dist/bookmark.cjs.js",
+    "main": "dist/bookmark.umd.js",
     "module": "dist/bookmark.esm.js",
-    "unpkg": "dist/bookmark.iife.js",
+    "unpkg": "dist/bookmark.umd.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/kobezhu/netscape-bookmark-tree.git"

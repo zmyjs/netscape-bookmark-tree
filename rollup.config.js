@@ -1,7 +1,5 @@
-import { terser } from 'rollup-plugin-terser';
-import resolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
 import babel from 'rollup-plugin-babel';
+import minify from 'rollup-plugin-babel-minify';
 import { version } from './package.json';
 
 const banner = `/**
@@ -11,56 +9,69 @@ const banner = `/**
  */
 `;
 
-const regConfig = {
-    input: 'src/reg.js',
-    output: [
-        {
-            format: 'esm',
-        },
-        {
-            format: 'cjs',
-        },
-        {
-            format: 'amd',
-        },
-        {
-            name: 'bookmark',
-            format: 'iife',
-        }
-    ],
-    plugins: [
-        babel({ exclude: 'node_modules/**' }),
-        terser()
-    ]
-
+const input = {
+    reg: 'src/regMode.js',
+    ast: 'src/astMode.js'
 };
 
-regConfig.output.forEach(function (v) {
-    v.banner = banner;
-    v.file = `dist/bookmark.${v.format}.js`;
-});
+const config = [];
 
-const astConfig = {
-    input: 'src/ast.js',
-    output: [
-        {
-            format: 'esm',
-        },
-        {
-            format: 'cjs',
-        }
-    ],
+function getDist(type) {
+    return `dist/bookmark.${type}.js`;
+}
+
+const pluginBabel = babel({ exclude: 'node_modules/**' }),
+    pluginMinify = minify({ comments: false, banner });
+
+
+// reg模式
+config.push({
+    input: input.reg,
+    output: {
+        name: 'bookmark',
+        format: 'umd',
+        file: getDist('umd'),
+    },
     plugins: [
-        resolve(),
-        commonjs(),
-        babel({ exclude: 'node_modules/**' }),
-        terser()
+        pluginBabel,
+        pluginMinify
     ]
-};
-
-astConfig.output.forEach(function (v) {
-    v.banner = banner;
-    v.file = `dist/bookmark.ast.${v.format}.js`;
 });
 
-export default [regConfig, astConfig];
+config.push({
+    input: input.reg,
+    output: {
+        format: 'esm',
+        file: getDist('esm'),
+    },
+    plugins: [
+        pluginMinify
+    ]
+});
+
+
+// ast模式
+config.push({
+    input: input.ast,
+    output: {
+        format: 'cjs',
+        file: getDist('ast.cjs'),
+    },
+    plugins: [
+        pluginBabel,
+        pluginMinify
+    ]
+});
+
+config.push({
+    input: input.ast,
+    output: {
+        format: 'esm',
+        file: getDist('ast.esm'),
+    },
+    plugins: [
+        pluginMinify
+    ]
+});
+
+export default config;

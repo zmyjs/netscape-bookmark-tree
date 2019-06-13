@@ -2,13 +2,13 @@ import parse5 from 'parse5';
 import * as utils from './utils';
 
 
-function getChild(nodes, option) {
+function getChild(nodes, option, last) {
     let items = [];
 
     nodes.forEach(function (node) {
         if (node.nodeName !== 'dt') return;
 
-        let item = {};
+        let item = { id: last + items.length };
 
         node.childNodes.forEach(function (n) {
             const type = n.nodeName;
@@ -18,7 +18,7 @@ function getChild(nodes, option) {
                     item[v.name] = v.value;
                 });
             } else if (type === 'dl') {
-                item[option.children] = getChild(n.childNodes, option);
+                item[option.children] = getChild(n.childNodes, option, item.id + option.split);
             }
         });
 
@@ -36,7 +36,7 @@ export default function (string, option) {
         const html = match[1].replace(/<p>/g, ''),
             fragment = parse5.parseFragment(html);
 
-        return getChild(fragment.childNodes, fullOption);
+        return getChild(fragment.childNodes, fullOption, '');
     } else {
         return match;
     }

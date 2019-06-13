@@ -2,32 +2,31 @@
 
 [![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
 
+把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
 
-Parse a **NETSCAPE-Bookmark-file-1** style bookmarks string into nested array.
+[English](README.md)
+[示例](https://kobezhu.github.io/netscape-bookmark-tree/example)
 
-[中文](README-CN.md)
-[Example](https://kobezhu.github.io/netscape-bookmark-tree/example)
+## 安装
 
-## Installation
+一般情况下，通过NPM安装：
 
-NPM
-
-```
+```sh
 npm install netscape-bookmark-tree
 ```
 
-In the **dist/** directory of the NPM package you will find many different builds.
-Here’s an overview of the difference between them:
+在NPM包的**dist/**目录包含多种构建版本，它们区别如下：
 
-- cjs – CommonJS, suitable for Node and other bundlers
-- esm – Keep the bundle as an ES module file, suitable for other bundlers and inclusion as a `<script type=module>` tag in modern browsers
-- iife – A self-executing function, suitable for inclusion as a `<script>` tag. use global variable `bookmark` to access the exports of your bundle.
-- amd – Asynchronous Module Definition, used with module loaders like RequireJS
-- system – Native format of the SystemJS loader
+- umd – CommonJS、AMD模块、浏览器直接引用；包的默认输出。
+- esm – ES标准模块，可以通过`<script type=module>`和模块打包器使用。
+- ast.cjs - 依赖**parse5**的CommonJS版本。
+- ast.esm - 依赖**parse5**的ES模块版本。
 
-## Quick start
+## 使用
 
-```
+### Node.js
+
+```sh
 const fs = require('fs');
 const bookmark = require('netscape-bookmark-tree');
 
@@ -37,23 +36,51 @@ let tree = bookmark(content);
 console.log(tree);
 ```
 
+默认模块使用正则进行解释，如果你的书签文件被修改过（压缩、删减标签等），那么可能无法正常识别。
+这个时候需要依赖 [parse5](https://github.com/inikulin/parse5) 解释 AST 进行精细的转换。
+但是这样开销更大。最好不要直接改动书签文件，书签文件头部直接写明了哈：
+
+```html
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! -->
+```
+
+使用如下：
+
+1. 安装 parse5
+```sh
+npm install parse5
+```
+
+2. 使用 AST 版模块
+```
+const bookmark = require('netscape-bookmark-tree/dist/bookmark.ast.cjs');
+```
+其他一样。
+
+### 浏览器
+
+通过全局变量`bookmark`使用。
+
 ## API
 
-The module is very simple, and has only one method, the method returns an array.
+模块很简单，只导出一个函数，接收字符串返回数组。
 
 ```
 /**
- * @param {String} string Bookmark text
- * @param {Object} option Configuration Options
+ * @param {String} string 书签字符串
+ * @param {Object} option 配置
  */
 bookmark(string, option);
 ```
 
-### Parameters
+### 参数
 
 1. string
 
-NETSCAPE-Bookmark-file-1 file format bookmarks string, The file starts with the following text:
+NETSCAPE-Bookmark-file-1 格式书签字符串，Chrome、Firefox导出的书签就是这种格式，文件开头为：
 
 ```
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
@@ -65,27 +92,27 @@ NETSCAPE-Bookmark-file-1 file format bookmarks string, The file starts with the 
 <H1>Bookmarks</H1>
 ```
 
-> [Related documentation](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85))
+> [书签格式相关文档](https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa753582(v=vs.85))
 
 2. option
 
 ```
 {
-    // Invokes function for each node. Signature: each(node, match)
+    // 生成每个节点都会调用，返回新节点，函数签名：each(node, match)
     each: utils.identity,
-    // Display key
+    // 显示键名
     name: 'name',
-    // Children key
+    // 子节点键名
     children: 'children',
-    // ID split
+    // ID分割线
     split: '_'
 }
 ```
 
-### Returns
+### 返回
 
-If the input parameters are correct, you see the value of the returned result as nested array,
-if not, then return `null`.
+如果传入的字符串符合格式，会返回转换后的树形数据（嵌套的数组）。
+如果不符合格式，返回`null`。
 
 ```
 [
@@ -108,6 +135,6 @@ if not, then return `null`.
 ]
 ```
 
-## License
+## 许可证
 
 [MIT](LICENSE)

@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const Vue = require('vue');
 const Renderer = require('vue-server-renderer');
-const bookmark = require('../dist/bookmark.cjs');
+const bookmark = require('../dist/bookmark.ast.cjs');
 
 const filePath = {
     content: path.join(__dirname, 'bookmarks_2019_5_5.html'),
@@ -34,32 +34,24 @@ const app = new Vue({
             return h('ol', data, slots);
         }
 
-        return h('div', { class: 'p-3', attrs: { id: 'app' } }, [
-            h('h1', [
-                'NETSCAPE-Bookmark-tree',
-                h('a', { class: 'ml-5', attrs: { href: 'https://github.com/kobezhu/netscape-bookmark-tree/blob/master/README.md' } }, 'Documentation')
-            ]),
-            h('nav', { class: 'my-5 bg-white sticky-top' }, [
-                h('h2', 'Navigation'),
-                h('a', { class: 'mr-5', attrs: { href: '#render' } }, 'Sample rendering'),
-                h('a', { class: 'mr-5', attrs: { href: '#array' } }, 'Result'),
-                h('a', { class: 'mr-5', attrs: { href: '#source' } }, 'Source data')
-            ]),
-            h('section', { attrs: { id: 'render' }, class: 'mb-5' }, [
-                h('h2', 'Sample rendering'),
-                renderList(tree)
-            ]),
-            h('section', { attrs: { id: 'array' }, class: 'mb-5' }, [
-                h('h2', 'Result'),
-                h('pre', JSON.stringify(tree, null, '    '))
-            ]),
-            h('section', { attrs: { id: 'source' }, class: 'mb-5' }, [
-                h('h2', 'Source data'),
-                h('pre', content)
-            ]),
-            h('footer', { class: 'text-center' }, '©ZMY')
-        ]);
-
+        return h(
+            'main',
+            { class: 'container pt-5', attrs: { id: 'app' } },
+            [
+                h('section', { attrs: { id: 'render' }, class: 'my-5' }, [
+                    h('h3', { class: 'mb-3' }, 'Sample rendering'),
+                    renderList(tree)
+                ]),
+                h('section', { attrs: { id: 'array' }, class: 'my-5' }, [
+                    h('h3', { class: 'mb-3' }, 'Result'),
+                    h('pre', JSON.stringify(tree, null, '    '))
+                ]),
+                h('section', { attrs: { id: 'source' }, class: 'my-5' }, [
+                    h('h3', { class: 'mb-3' }, 'Source data'),
+                    h('pre', content)
+                ])
+            ]
+        );
     }
 });
 
