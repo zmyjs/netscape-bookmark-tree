@@ -2,9 +2,9 @@
 
 [![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
 
-把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（数组）。
+把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（嵌套数组）。
 
-[English](README.md)
+[English](README-EN.md)
 [示例](https://kobezhu.github.io/netscape-bookmark-tree/example)
 
 ## 安装
@@ -26,6 +26,8 @@ npm install netscape-bookmark-tree
 
 ### Node.js
 
+一般情况下：
+
 ```sh
 const fs = require('fs');
 const bookmark = require('netscape-bookmark-tree');
@@ -39,7 +41,6 @@ console.log(tree);
 默认模块使用正则进行解释，如果你的书签文件被修改过（压缩、删减标签等），那么可能无法正常识别。
 这个时候需要依赖 [parse5](https://github.com/inikulin/parse5) 解释 AST 进行精细的转换。
 但是这样开销更大。最好不要直接改动书签文件，书签文件头部直接写明了哈。
-
 
 使用如下：
 
