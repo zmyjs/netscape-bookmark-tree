@@ -1,32 +1,18 @@
 # NETSCAPE-Bookmark-tree
 
+[中文](README.md)
+
 [![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
 
 Parse a **NETSCAPE-Bookmark-file-1** style bookmarks string into nested array.
 
-[中文](README.md)
-[Example](https://kobezhu.github.io/netscape-bookmark-tree/example)
+## Example
+
+https://kobezhu.github.io/netscape-bookmark-tree/example
 
 ## Installation
 
-NPM
-
-```
-npm install netscape-bookmark-tree
-```
-
-In the **dist/** directory of the NPM package you will find many different builds.
-Here’s an overview of the difference between them:
-
-- cjs – CommonJS, suitable for Node and other bundlers
-- esm – Keep the bundle as an ES module file, suitable for other bundlers and inclusion as a `<script type=module>` tag in modern browsers
-- iife – A self-executing function, suitable for inclusion as a `<script>` tag. use global variable `bookmark` to access the exports of your bundle.
-- amd – Asynchronous Module Definition, used with module loaders like RequireJS
-- system – Native format of the SystemJS loader
-
-## Quick start
-
-一般情况下，通过NPM安装：
+Using npm
 
 ```sh
 npm install netscape-bookmark-tree
@@ -34,12 +20,12 @@ npm install netscape-bookmark-tree
 
 在NPM包的**dist/**目录包含多种构建版本，它们区别如下：
 
-- umd – Universal Module Definition, works as amd, cjs and iife all in one
-- esm – Keep the bundle as an ES module file
-- ast.cjs - 依赖**parse5**的CommonJS版本。
-- ast.esm - 依赖**parse5**的ES模块版本。
+- umd – Universal Module Definition, works as amd, cjs and iife all in one.
+- esm – Keep the bundle as an ES module file.
+- ast.cjs - Rely on the CommonJS version of **prse5**.
+- ast.esm - Rely on the ES module version of **prse5**.
 
-## 使用
+## Usage
 
 ### Node.js
 
@@ -55,26 +41,27 @@ let tree = bookmark(content);
 console.log(tree);
 ```
 
-默认模块使用正则进行解释，如果你的书签文件被修改过（压缩、删减标签等），那么可能无法正常识别。
-这个时候需要依赖 [parse5](https://github.com/inikulin/parse5) 解释 AST 进行精细的转换。
-但是这样开销更大。最好不要直接改动书签文件，书签文件头部直接写明了哈。
+The default module USES regular explanations, and if your bookmarks have been modified (compressed, deleted, etc.), they may not be recognized properly.
+At this point, you need to rely on [parse5](https://github.com/inikulin/parse5) for subtle transformations.
+But it's more expensive. It is best not to change bookmark files directly.
 
-使用如下：
+Use with parse5
 
-1. 安装 parse5
+1. Install parse5 using npm
 ```sh
 npm install parse5
 ```
 
-2. 使用 AST 版模块
+2. Use the AST version of the module
 ```js
 const bookmark = require('netscape-bookmark-tree/dist/bookmark.ast.cjs');
 ```
-其他一样。
 
-### 浏览器
+As well as other.
 
-通过全局变量`bookmark`使用。
+### Browser
+
+Using the global variable 'bookmark'.
 
 ## API
 

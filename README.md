@@ -2,14 +2,17 @@
 
 [![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
 
+[English](README-EN.md)
+
 把**NETSCAPE-Bookmark-file-1**格式书签转换成**JavaScript**树形数据（嵌套数组）。
 
-[English](README-EN.md)
-[示例](https://kobezhu.github.io/netscape-bookmark-tree/example)
+## 示例
+
+https://kobezhu.github.io/netscape-bookmark-tree/example
 
 ## 安装
 
-一般情况下，通过NPM安装：
+通过NPM安装：
 
 ```sh
 npm install netscape-bookmark-tree
@@ -42,7 +45,7 @@ console.log(tree);
 这个时候需要依赖 [parse5](https://github.com/inikulin/parse5) 解释 AST 进行精细的转换。
 但是这样开销更大。最好不要直接改动书签文件，书签文件头部直接写明了哈。
 
-使用如下：
+配合 parse5 使用：
 
 1. 安装 parse5
 ```sh

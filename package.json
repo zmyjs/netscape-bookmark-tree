@@ -1,6 +1,6 @@
 {
     "name": "netscape-bookmark-tree",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "author": "ZMY",
     "license": "MIT",
     "keywords": [
@@ -11,13 +11,13 @@
     "description": "Parse a 'NETSCAPE-Bookmark-file-1' style bookmarks string into nested array",
     "scripts": {
         "build": "rollup -c",
-        "example": "node example/build"
+        "test": "node example/build"
     },
     "devDependencies": {
-        "@babel/core": "^7.4.5",
-        "@babel/preset-env": "^7.4.5",
-        "rollup": "^1.15.2",
-        "rollup-plugin-babel": "^4.3.2",
+        "@babel/core": "^7.5.5",
+        "@babel/preset-env": "^7.5.5",
+        "rollup": "^1.17.0",
+        "rollup-plugin-babel": "^4.3.3",
         "rollup-plugin-babel-minify": "^8.0.0",
         "vue": "^2.6.10",
         "vue-server-renderer": "^2.6.10"
@@ -25,6 +25,9 @@
     "main": "dist/bookmark.umd.js",
     "module": "dist/bookmark.esm.js",
     "unpkg": "dist/bookmark.umd.js",
+    "files": [
+        "dist/"
+    ],
     "repository": {
         "type": "git",
         "url": "https://github.com/kobezhu/netscape-bookmark-tree.git"
