@@ -17,8 +17,8 @@ Using npm
 ```sh
 npm install netscape-bookmark-tree
 ```
-
-在NPM包的**dist/**目录包含多种构建版本，它们区别如下：
+In the **dist/** directory of the NPM package you will find many different builds.
+Here’s an overview of the difference between them:
 
 - umd – Universal Module Definition, works as amd, cjs and iife all in one.
 - esm – Keep the bundle as an ES module file.
