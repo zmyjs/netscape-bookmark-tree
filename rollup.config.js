@@ -1,77 +1,38 @@
-import babel from 'rollup-plugin-babel';
-import minify from 'rollup-plugin-babel-minify';
-import { version } from './package.json';
-
-const banner = `/**
- * netscape-bookmark-tree v${version}
- * Build ${Date.now()}
- * Zhu MaoYan
- */
-`;
-
-const input = {
-    reg: 'src/regMode.js',
-    ast: 'src/astMode.js'
-};
-
-const config = [];
+import terser from '@rollup/plugin-terser';
 
 function getDist(type) {
-    return `dist/bookmark.${type}.js`;
+    return `dist/bookmark.${type}`;
 }
 
-const pluginBabel = babel({ exclude: 'node_modules/**' }),
-    pluginMinify = minify({ comments: false, banner });
-
-
-// reg模式
-config.push({
-    input: input.reg,
-    output: {
-        name: 'bookmark',
-        format: 'umd',
-        file: getDist('umd'),
+export default [
+    {
+        input: 'src/node.js',
+        output: [
+            {
+                format: 'cjs',
+                file: getDist('cjs')
+            },
+            {
+                format: 'es',
+                file: getDist('js')
+            },
+        ],
+        external: ['parse5'],
+        plugins: [terser()]
     },
-    plugins: [
-        pluginBabel,
-        pluginMinify
-    ]
-});
-
-config.push({
-    input: input.reg,
-    output: {
-        format: 'esm',
-        file: getDist('esm'),
-    },
-    plugins: [
-        pluginMinify
-    ]
-});
-
-
-// ast模式
-config.push({
-    input: input.ast,
-    output: {
-        format: 'cjs',
-        file: getDist('ast.cjs'),
-    },
-    plugins: [
-        pluginBabel,
-        pluginMinify
-    ]
-});
-
-config.push({
-    input: input.ast,
-    output: {
-        format: 'esm',
-        file: getDist('ast.esm'),
-    },
-    plugins: [
-        pluginMinify
-    ]
-});
-
-export default config;
+    {
+        input: 'src/browser.js',
+        output: [
+            {
+                name: 'bookmark',
+                format: 'iife',
+                file: getDist('browser.iife.js'),
+            },
+            {
+                format: 'es',
+                file: getDist('browser.es.js'),
+            },
+        ],
+        plugins: [terser()]
+    }
+];

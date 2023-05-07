@@ -1,6 +1,6 @@
 {
     "name": "netscape-bookmark-tree",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "author": "ZMY",
     "license": "MIT",
     "keywords": [
@@ -10,21 +10,17 @@
     "homepage": "https://kobezhu.github.io/netscape-bookmark-tree/example",
     "description": "Parse a 'NETSCAPE-Bookmark-file-1' style bookmarks string into nested array",
     "scripts": {
-        "build": "rollup -c",
-        "example": "node example/build"
+        "build": "rollup -c"
     },
     "devDependencies": {
-        "@babel/core": "^7.4.5",
-        "@babel/preset-env": "^7.4.5",
-        "rollup": "^1.15.2",
-        "rollup-plugin-babel": "^4.3.2",
-        "rollup-plugin-babel-minify": "^8.0.0",
-        "vue": "^2.6.10",
-        "vue-server-renderer": "^2.6.10"
+        "@rollup/plugin-terser": "^0.4.1",
+        "rollup": "^3.21.5"
     },
-    "main": "dist/bookmark.umd.js",
-    "module": "dist/bookmark.esm.js",
-    "unpkg": "dist/bookmark.umd.js",
+    "type": "module",
+    "main": "src/node.js",
+    "module": "dist/bookmark.node.js",
+    "browser": "dist/bookmark.browser.js",
+    "unpkg": "dist/bookmark.browser.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/kobezhu/netscape-bookmark-tree.git"
@@ -33,6 +29,6 @@
         "url": "https://github.com/kobezhu/netscape-bookmark-tree/issues"
     },
     "dependencies": {
-        "parse5": "^5.1.0"
+        "parse5": "^7.1.2"
     }
 }
