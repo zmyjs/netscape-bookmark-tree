@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NETSCAPE-Bookmark-tree</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        #app {
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            padding: 1rem;
+            background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        h1 a {
+            text-decoration: none;
+            color: black;
+        }
+
+        main {
+            display: flex;
+            flex-grow: 1;
+            height: 0;
+        }
+
+        footer {
+            padding: 0.5rem;
+            text-align: center;
+            font-size: 12px;
+            background-color: #eeeeee;
+            color: gray;
+        }
+
+        main section {
+            flex: 1;
+            overflow: auto;
+        }
+
+        #result-dom .icon {
+            width: 1rem;
+            margin-right: 0.5rem;
+            display: inline-block;
+        }
+
+        #result-dom span.icon {
+            text-align: center;
+            color: gray;
+            font-size: 12px;
+            background-color: whitesmoke;
+        }
+
+        #result-dom .fold {
+            cursor: pointer;
+            width: 1.25rem;
+            margin-right: 0.5rem;
+            padding: 0;
+            text-align: center;
+        }
+
+        #result-dom li {
+            margin: 0.5rem;
+        }
+
+        pre {
+            font-family: Consolas, 'Courier New', Courier, monospace;
+            background-color: #222222;
+            color: whitesmoke;
+            padding: 1rem;
+            margin: 0;
+            font-size: 12px;
+        }
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding-left: 1rem;
+        }
+
+        #control p {
+            margin-top: 0.5rem;
+            margin-bottom: 0;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1>
+                <a href="https://github.com/zmyjs/netscape-bookmark-tree" target="_blank"
+                    rel="noopener noreferrer">NETSCAPE-Bookmark-tree</a>
+            </h1>
+            <div id="control">
+                <form>
+                    <input id="input-file" type="file" name="file">
+                    <button type="button" id="transform">转换</button>
+                </form>
+                <p>
+                    选择书签文件，点击转换可查看效果，控制台也会输出；书签文件会在本地进行处理，不会发送到任何服务器。
+                </p>
+            </div>
+        </header>
+
+        <main>
+            <section>
+                <pre id="bookmark-file"></pre>
+            </section>
+            <section>
+                <ul id="result-dom"></ul>
+            </section>
+            <section>
+                <pre id="result-json"></pre>
+            </section>
+        </main>
+
+        <footer>
+            ZMY
+        </footer>
+    </div>
+
+    <script type="module">
+        import bookmark from "../src/browser.js";
+
+        function toJSON(text) {
+            const tree = bookmark(text);
+            console.log(tree);
+            document.getElementById('result-json').textContent = JSON.stringify(tree, undefined, ' ');
+        }
+
+        function toDOM(text) {
+            const dom = bookmark(text, {
+                each(node, parent, isLeaf) {
+                    const li = document.createElement('li');
+
+                    if (isLeaf) {
+                        let icon;
+                        if (node.icon) {
+                            icon = document.createElement('img');
+                            icon.src = node.icon;
+                        } else {
+                            icon = document.createElement('span');
+                            icon.textContent = node.name.slice(0, 1);
+                        }
+                        icon.className = 'icon';
+                        li.appendChild(icon);
+
+                        const label = document.createElement('a');
+                        label.textContent = node.name;
+                        label.className = 'label';
+                        label.href = node.href;
+                        label.target = '_blank';
+                        li.appendChild(label);
+                    } else {
+                        const ul = document.createElement('ul');
+
+                        const fold = document.createElement('button');
+                        fold.className = 'fold';
+                        const updateFold = function () {
+                            fold.textContent = ul.hidden ? '+' : '-';
+                        }
+                        updateFold();
+                        fold.addEventListener('click', function () {
+                            ul.hidden = !ul.hidden;
+                            updateFold();
+                        });
+
+                        const label = document.createElement('label');
+                        label.textContent = node.name;
+                        label.className = 'label';
+
+                        li.appendChild(fold);
+                        li.appendChild(label);
+                        li.appendChild(ul);
+                    }
+
+                    return li;
+                },
+                setChildren(li, children) {
+                    children.forEach(function (el) {
+                        li.children[2].appendChild(el);
+                    });
+                }
+            });
+
+            const ul = document.getElementById('result-dom')
+            ul.innerHTML = '';
+            dom.forEach(li => ul.appendChild(li));
+        }
+
+        function update(res) {
+            res.text().then(function (text) {
+                document.getElementById('bookmark-file').textContent = text;
+                toJSON(text);
+                toDOM(text);
+            }, function () {
+                alert('数据错误');
+            });
+        }
+
+        document.getElementById('transform').addEventListener('click', function () {
+            const file = document.getElementById('input-file').files[0];
+
+            if (file) {
+                update(file);
+            } else {
+                alert('请选择文件或者输入地址');
+            }
+        });
+
+        fetch('./bookmarks-file.html').then(update);
+    </script>
+</body>
+
+</html>

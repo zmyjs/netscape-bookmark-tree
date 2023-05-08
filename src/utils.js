@@ -1,47 +1,52 @@
-export function identity(p) {
-    return p;
-}
-
-export function parse(parseHTML, string, option) {
+export function parse(parseConfig, string, option) {
     option = Object.assign({
-        nameKey: 'name',
-        childrenKey: 'children',
-        idKey: 'id',
-        idSplit: '_',
-        each: identity
+        each(node, parent, isLeaf, htmlNode) {
+            return node;
+        },
+        setChildren(node, children) {
+            node.children = children;
+        }
     }, option);
 
-    const html = string.replace(/^[\s\S]+<\/TITLE>|<DT>|<p>/g, '');
-    const rootNodes = parseHTML(html);
-
-    function iterator(htmlNodes, parentNode) {
+    function iterator(htmlNodes, parent) {
+        const pid = parent ? parent.id : Date.now();
         const nodes = [];
 
         htmlNodes.forEach(function (htmlNode) {
-            const type = htmlNode.nodeName;
+            const tag = parseConfig.getTag(htmlNode);
 
-            if (type === 'a' || type === 'h3' || type === 'h1') {
-                const id = `${parentNode.id}${option.idSplit}${nodes.length}`;
-                const node = { [option.idKey]: id };
+            function push(isLeaf) {
+                const index = nodes.length;
+                const id = `${pid}_${index}`;
+                let node = {
+                    index,
+                    id,
+                    pid,
+                    name: parseConfig.getName(htmlNode),
+                };
+                parseConfig.addAttrs(node, htmlNode);
 
-                htmlNode.attrs.forEach(function (v) {
-                    node[v.name] = v.value;
-                });
+                node = option.each(node, parent, isLeaf, htmlNode);
 
-                node[option.nameKey] = htmlNode.childNodes[0].value;
-
-                option.each(node);
                 nodes.push(node);
-            } else if (type === 'dl') {
+            }
+
+            if (tag === 'a') {
+                push(true);
+            } else if (tag === 'h3' || tag === 'h1') {
+                push(false);
+            } else if (tag === 'dl') {
                 const node = nodes[nodes.length - 1];
-                node[option.childrenKey] = iterator(htmlNode.childNodes, node);
+                const children = iterator(htmlNode.childNodes, node);
+                option.setChildren(node, children);
             }
         });
 
         return nodes;
     }
 
-    const tree = iterator(rootNodes, { id: '' });
+    const html = string.replace(/^[\s\S]+<\/TITLE>|<DT>|<p>/g, '');
+    const tree = iterator(parseConfig.parseHTML(html), null);
 
     return tree;
 }

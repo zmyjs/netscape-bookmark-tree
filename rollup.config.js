@@ -30,7 +30,7 @@ export default [
             },
             {
                 format: 'es',
-                file: getDist('browser.es.js'),
+                file: getDist('browser.js'),
             },
         ],
         plugins: [terser()]
