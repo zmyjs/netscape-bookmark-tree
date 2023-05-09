@@ -1,33 +1,45 @@
-export function parse(parseConfig, string, option) {
-    option = Object.assign({
-        each(node, parent, isLeaf, htmlNode) {
-            return node;
-        },
-        setChildren(node, children) {
-            node.children = children;
-        }
-    }, option);
+export function last(array) {
+    return array[array.length - 1];
+}
 
-    function iterator(htmlNodes, parent) {
-        const pid = parent ? parent.id : Date.now();
+export const defaultOptions = {
+    each(node, context) {
+        const parent = last(context.parentPath),
+            index = context.index;
+
+        node.index = index;
+
+        if (parent) {
+            node.id = `${parent.id}_${index}`;
+            node.pid = parent.id
+        } else {
+            node.id = index.toString();
+        }
+
+        return node;
+    },
+    setChildren(node, children) {
+        node.children = children;
+    }
+}
+
+export function parse(parseConfig, string, options) {
+    options = Object.assign({}, defaultOptions, options);
+
+    function iterator(rawNodes, parentPath) {
         const nodes = [];
 
-        htmlNodes.forEach(function (htmlNode) {
-            const tag = parseConfig.getTag(htmlNode);
+        rawNodes.forEach(function (rawNode) {
+            const tag = parseConfig.getTag(rawNode);
 
             function push(isLeaf) {
                 const index = nodes.length;
-                const id = `${pid}_${index}`;
                 let node = {
-                    index,
-                    id,
-                    pid,
-                    name: parseConfig.getName(htmlNode),
+                    name: parseConfig.getName(rawNode),
                 };
-                parseConfig.addAttrs(node, htmlNode);
-
-                node = option.each(node, parent, isLeaf, htmlNode);
-
+                parseConfig.addAttrs(node, rawNode);
+                const context = { parentPath, isLeaf, index, rawNode };
+                node = options.each(node, context) || node;
                 nodes.push(node);
             }
 
@@ -37,8 +49,9 @@ export function parse(parseConfig, string, option) {
                 push(false);
             } else if (tag === 'dl') {
                 const node = nodes[nodes.length - 1];
-                const children = iterator(htmlNode.childNodes, node);
-                option.setChildren(node, children);
+                const nodePath = parentPath.concat(node);
+                const children = iterator(rawNode.childNodes, nodePath);
+                options.setChildren(node, children);
             }
         });
 
@@ -46,7 +59,7 @@ export function parse(parseConfig, string, option) {
     }
 
     const html = string.replace(/^[\s\S]+<\/TITLE>|<DT>|<p>/g, '');
-    const tree = iterator(parseConfig.parseHTML(html), null);
+    const tree = iterator(parseConfig.parseHTML(html), []);
 
     return tree;
 }

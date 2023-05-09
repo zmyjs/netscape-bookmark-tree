@@ -6,6 +6,6 @@ const getPath = url => fileURLToPath(new URL(url, import.meta.url));
 
 const text = readFileSync(getPath('bookmarks-file.html'), 'utf-8');
 
-const tree = bookmark(text);
+const tree = bookmark.parse(text);
 
 console.log(JSON.stringify(tree, undefined, ' '));

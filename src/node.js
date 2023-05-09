@@ -1,5 +1,5 @@
 import { parseFragment } from 'parse5';
-import { parse } from './utils.js';
+import { parse, defaultOptions } from './utils.js';
 
 const parseConfig = {
     parseHTML(html) {
@@ -13,8 +13,11 @@ const parseConfig = {
             node[attr.name] = attr.value;
         });
     }
-}
+};
 
-export default function (string, option) {
-    return parse(parseConfig, string, option);
-}
+export default {
+    parse(string, options) {
+        return parse(parseConfig, string, options);
+    },
+    defaultOptions
+};

@@ -145,14 +145,14 @@
         import bookmark from "../src/browser.js";
 
         function toJSON(text) {
-            const tree = bookmark(text);
+            const tree = bookmark.parse(text);
             console.log(tree);
             document.getElementById('result-json').textContent = JSON.stringify(tree, undefined, ' ');
         }
 
         function toDOM(text) {
-            const dom = bookmark(text, {
-                each(node, parent, isLeaf) {
+            const dom = bookmark.parse(text, {
+                each(node, { isLeaf }) {
                     const li = document.createElement('li');
 
                     if (isLeaf) {
