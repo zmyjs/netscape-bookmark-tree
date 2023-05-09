@@ -28,9 +28,6 @@
         "children": [
             {
                 "name": "收藏夹栏",
-                "add_date": "1638613438",
-                "last_modified": "1683603257",
-                "personal_toolbar_folder": "true",
                 "index": 0,
                 "id": "0_0",
                 "pid": "0",
@@ -38,14 +35,15 @@
                     {
                         "name": "GitHub",
                         "href": "https://github.com/zmyjs",
-                        "add_date": "1488553098",
                         "icon": "data:image/png;base64,...",
                         "index": 0,
                         "id": "0_0_0",
                         "pid": "0_0"
-                    }
+                    },
+                    { "name": "..." }
                 ]
-            }
+            },
+            { "name": "..." }
         ]
     }
 ]
