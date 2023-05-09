@@ -19,10 +19,10 @@
         "rollup": "^3.21.5"
     },
     "type": "module",
-    "main": "dist/bookmark.js",
-    "module": "dist/bookmark.js",
-    "browser": "dist/bookmark.browser.js",
-    "unpkg": "dist/bookmark.browser.js",
+    "main": "bookmark.js",
+    "module": "bookmark.js",
+    "browser": "bookmark.browser.js",
+    "unpkg": "bookmark.browser.js",
     "repository": {
         "type": "git",
         "url": "https://github.com/zmyjs/netscape-bookmark-tree.git"
@@ -34,6 +34,6 @@
         "parse5": "^7.1.2"
     },
     "files": [
-        "dist"
+        "bookmark.*"
     ]
 }

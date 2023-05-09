@@ -1,7 +1,7 @@
 import terser from '@rollup/plugin-terser';
 
 function getDist(type) {
-    return `dist/bookmark.${type}`;
+    return `bookmark.${type}`;
 }
 
 export default [

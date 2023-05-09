@@ -3,6 +3,15 @@ export function last(array) {
 }
 
 export const defaultOptions = {
+    /**
+    * 遍历每个节点，返回新的节点
+    * @param {Object} node 从书签文件解释的节点
+    * @param {Object} context 节点上下文信息
+    * @param {Array} context.parentPath 父节点集合，例如：[node.parent.parent, node.parent]
+    * @param {Boolean} context.isLeaf 是否叶子节点，你不能通过node.children判断，因为解释到该节点时，它的子节点还没开始解释
+    * @param {Object} context.index 节点在当前数组的索引，生成唯一ID可能会用到
+    * @returns {Object} 新的节点
+    */
     each(node, context) {
         const parent = last(context.parentPath),
             index = context.index;
@@ -18,6 +27,11 @@ export const defaultOptions = {
 
         return node;
     },
+    /**
+     * 设置当前节点的子节点
+     * @param {Object} node 
+     * @param {Array} children 
+     */
     setChildren(node, children) {
         node.children = children;
     }

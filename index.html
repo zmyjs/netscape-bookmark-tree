@@ -115,10 +115,10 @@
 
         function toDOM(text) {
             const dom = bookmarkParse(text, {
-                each(node, { isLeaf }) {
+                each(node, context) {
                     const li = document.createElement('li');
 
-                    if (isLeaf) {
+                    if (context.isLeaf) {
                         let icon;
                         if (node.icon) {
                             icon = document.createElement('img');

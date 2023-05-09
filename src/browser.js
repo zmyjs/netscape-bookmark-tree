@@ -18,6 +18,12 @@ const parseConfig = {
     }
 };
 
+/**
+ * 解释浏览器导出的格式书签，转换嵌套数组
+ * @param {String} string 
+ * @param {Object} options 
+ * @returns {Array} 嵌套数组
+ */
 function parse(string, options) {
     return bookmarkParse(parseConfig, string, options);
 }
