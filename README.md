@@ -126,7 +126,20 @@ function parse(string, options) {
 
 ### bookmarkText
 
-书签文件字符串。换行和缩进不影响解释。
+书签文件字符串。多书签合并，重复、换行、缩进、等不影响解释。
+
+如果你没有改动文件，返回的数组里面只有一个对象（根节点），如果你把多个书签文件合并一起解释，这样就返回多个对象的数组。
+
+```js
+const bookmark1 = readFileSync('bookmarks_2019_5_5.html', 'utf-8');
+const bookmark2 = readFileSync('bookmarks_2023_5_9.html', 'utf-8');
+const bookmark3 = bookmark2.replace(/\n/g, '');
+
+const tree = bookmark.parse(bookmark1 + bookmark2 + bookmark3);
+
+tree.length;
+// 3
+```
 
 ### options
 
@@ -174,7 +187,7 @@ bookmark.parse(string, {
 });
 ```
 
-## 使用技巧
+## 示例
 
 虽然只有两个自定义选项，但是已经足够自由。
 
@@ -218,6 +231,7 @@ const [li] = bookmark.parse(string, {
             li.appendChild(ul);
         }
 
+        // 返回的是 Element
         return li;
     },
     setChildren(li, children) {

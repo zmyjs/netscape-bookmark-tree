@@ -37,6 +37,14 @@ export const defaultOptions = {
     }
 }
 
+
+/**
+ * 解释书签核心方法
+ * @param {Object} parseConfig HTML解释器配置
+ * @param {String} string 书签字符串
+ * @param {Object} options 嵌套数组
+ * @returns 
+ */
 export function bookmarkParse(parseConfig, string, options) {
     options = Object.assign({}, defaultOptions, options);
 
@@ -72,7 +80,7 @@ export function bookmarkParse(parseConfig, string, options) {
         return nodes;
     }
 
-    const html = string.replace(/^[\s\S]+<\/TITLE>|<DT>|<p>/g, '');
+    const html = string.replace(/<!DOCTYPE [\s\S]+?<\/TITLE>|<DT>|<p>/g, '');
     const tree = iterator(parseConfig.parseHTML(html), []);
 
     return tree;

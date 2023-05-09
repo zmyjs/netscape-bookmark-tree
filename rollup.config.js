@@ -1,21 +1,31 @@
 import terser from '@rollup/plugin-terser';
 
-function getDist(type) {
-    return `bookmark.${type}`;
+function getOutput(format, suffix) {
+    const file = `bookmark.${suffix}`;
+
+    return {
+        format: format,
+        file,
+        exports: 'named',
+        banner: `
+/**
+ * @file ${file}
+ * @name ${process.env.npm_package_name}
+ * @version ${process.env.npm_package_version} Build.${Date.now()}
+ * @author ZMY
+ * @license MIT
+ */
+                `,
+        name: 'bookmark',
+    };
 }
 
 export default [
     {
         input: 'src/node.js',
         output: [
-            {
-                format: 'cjs',
-                file: getDist('cjs')
-            },
-            {
-                format: 'es',
-                file: getDist('js')
-            },
+            getOutput('cjs', 'cjs'),
+            getOutput('es', 'js'),
         ],
         external: ['parse5'],
         plugins: [terser()]
@@ -23,15 +33,8 @@ export default [
     {
         input: 'src/browser.js',
         output: [
-            {
-                name: 'bookmark',
-                format: 'iife',
-                file: getDist('browser.iife.js'),
-            },
-            {
-                format: 'es',
-                file: getDist('browser.js'),
-            },
+            getOutput('iife', 'browser.iife.js'),
+            getOutput('es', 'browser.js'),
         ],
         plugins: [terser()]
     }

@@ -1,13 +1,13 @@
 {
     "name": "netscape-bookmark-tree",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "author": "ZMY",
     "license": "MIT",
     "keywords": [
         "bookmark",
         "NETSCAPE-Bookmark"
     ],
-    "homepage": "https://zmyjs.github.io/netscape-bookmark-tree/example",
+    "homepage": "https://zmyjs.github.io/netscape-bookmark-tree",
     "description": "Parse a 'NETSCAPE-Bookmark-file-1' style bookmarks string into nested array",
     "scripts": {
         "build": "rollup -c",
