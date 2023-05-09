@@ -1,5 +1,5 @@
 import { parseFragment } from 'parse5';
-import { parse, defaultOptions } from './utils.js';
+import { bookmarkParse, defaultOptions } from './utils.js';
 
 const parseConfig = {
     parseHTML(html) {
@@ -15,9 +15,10 @@ const parseConfig = {
     }
 };
 
-export default {
-    parse(string, options) {
-        return parse(parseConfig, string, options);
-    },
-    defaultOptions
-};
+function parse(string, options) {
+    return bookmarkParse(parseConfig, string, options);
+}
+
+export { defaultOptions, parse };
+
+export default parse;

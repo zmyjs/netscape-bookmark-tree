@@ -23,7 +23,7 @@ export const defaultOptions = {
     }
 }
 
-export function parse(parseConfig, string, options) {
+export function bookmarkParse(parseConfig, string, options) {
     options = Object.assign({}, defaultOptions, options);
 
     function iterator(rawNodes, parentPath) {
@@ -62,4 +62,18 @@ export function parse(parseConfig, string, options) {
     const tree = iterator(parseConfig.parseHTML(html), []);
 
     return tree;
+}
+
+export function eachTree(tree, callback) {
+    function iterator(nodes) {
+        nodes.forEach(function (node, index) {
+            callback(node, index);
+
+            if (node.children) {
+                iterator(node.children);
+            }
+        });
+    }
+
+    iterator(tree);
 }

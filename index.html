@@ -104,54 +104,17 @@
             font-size: 12px;
         }
     </style>
-</head>
-
-<body>
-    <div id="app">
-        <header>
-            <h1>
-                <a href="https://github.com/zmyjs/netscape-bookmark-tree" target="_blank"
-                    rel="noopener noreferrer">NETSCAPE-Bookmark-tree</a>
-            </h1>
-            <div id="control">
-                <form>
-                    <input id="input-file" type="file" name="file">
-                    <button type="button" id="transform">转换</button>
-                </form>
-                <p>
-                    选择书签文件，点击转换可查看效果，控制台也会输出；书签文件会在本地进行处理，不会发送到任何服务器。
-                </p>
-            </div>
-        </header>
-
-        <main>
-            <section>
-                <pre id="bookmark-file"></pre>
-            </section>
-            <section>
-                <ul id="result-dom"></ul>
-            </section>
-            <section>
-                <pre id="result-json"></pre>
-            </section>
-        </main>
-
-        <footer>
-            ZMY
-        </footer>
-    </div>
-
     <script type="module">
-        import bookmark from "../src/browser.js";
+        import { parse as bookmarkParse } from "./src/browser.js";
 
         function toJSON(text) {
-            const tree = bookmark.parse(text);
+            const tree = bookmarkParse(text);
             console.log(tree);
             document.getElementById('result-json').textContent = JSON.stringify(tree, undefined, ' ');
         }
 
         function toDOM(text) {
-            const dom = bookmark.parse(text, {
+            const dom = bookmarkParse(text, {
                 each(node, { isLeaf }) {
                     const li = document.createElement('li');
 
@@ -230,8 +193,44 @@
             }
         });
 
-        fetch('./bookmarks_2023_5_9.html').then(update);
+        fetch('./test/bookmarks_2023_5_9.html').then(update);
     </script>
+</head>
+
+<body>
+    <div id="app">
+        <header>
+            <h1>
+                <a href="https://github.com/zmyjs/netscape-bookmark-tree" target="_blank"
+                    rel="noopener noreferrer">NETSCAPE-Bookmark-tree</a>
+            </h1>
+            <div id="control">
+                <form>
+                    <input id="input-file" type="file" name="file">
+                    <button type="button" id="transform">转换</button>
+                </form>
+                <p>
+                    选择书签文件，点击转换可查看效果，控制台也会输出；书签文件会在本地进行处理，不会发送到任何服务器。
+                </p>
+            </div>
+        </header>
+
+        <main>
+            <section>
+                <pre id="bookmark-file"></pre>
+            </section>
+            <section>
+                <ul id="result-dom"></ul>
+            </section>
+            <section>
+                <pre id="result-json"></pre>
+            </section>
+        </main>
+
+        <footer>
+            ZMY
+        </footer>
+    </div>
 </body>
 
 </html>
