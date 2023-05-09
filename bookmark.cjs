@@ -1,7 +1,7 @@
 /**
  * @file bookmark.cjs
  * @name netscape-bookmark-tree
- * @version 2.0.1 Build.1683630484992
+ * @version 2.0.2 Build.1683632823036
  * @author ZMY
  * @license MIT
  */
