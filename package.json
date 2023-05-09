@@ -7,7 +7,7 @@
         "bookmark",
         "NETSCAPE-Bookmark"
     ],
-    "homepage": "https://kobezhu.github.io/netscape-bookmark-tree/example",
+    "homepage": "https://zmyjs.github.io/netscape-bookmark-tree/example",
     "description": "Parse a 'NETSCAPE-Bookmark-file-1' style bookmarks string into nested array",
     "scripts": {
         "build": "rollup -c",
@@ -24,12 +24,15 @@
     "unpkg": "dist/bookmark.browser.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/kobezhu/netscape-bookmark-tree.git"
+        "url": "https://github.com/zmyjs/netscape-bookmark-tree.git"
     },
     "bugs": {
-        "url": "https://github.com/kobezhu/netscape-bookmark-tree/issues"
+        "url": "https://github.com/zmyjs/netscape-bookmark-tree/issues"
     },
     "dependencies": {
         "parse5": "^7.1.2"
-    }
+    },
+    "files": [
+        "dist"
+    ]
 }
