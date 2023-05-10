@@ -1,6 +1,6 @@
 {
     "name": "netscape-bookmark-tree",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "author": "ZMY",
     "license": "MIT",
     "keywords": [
@@ -8,7 +8,7 @@
         "NETSCAPE-Bookmark"
     ],
     "homepage": "https://zmyjs.github.io/netscape-bookmark-tree/example/",
-    "description": "解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成嵌套数组",
+    "description": "Parse the NETSCAPE-Bookmark-file-1 format bookmarks exported by the browser and convert them into nested arrays.",
     "scripts": {
         "build": "rollup -c",
         "test": "mocha test/node.js"

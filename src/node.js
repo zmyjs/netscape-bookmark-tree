@@ -16,7 +16,7 @@ const parseConfig = {
 };
 
 /**
- * 解释浏览器导出的格式书签，转换嵌套数组
+ * 解释浏览器导出的书签，转换嵌套数组
  * @param {String} string 书签字符串
  * @param {Object} options 选项
  * @returns {Array} 嵌套数组

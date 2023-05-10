@@ -2,14 +2,13 @@
 
 [![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
 
-[Example](https://zmyjs.github.io/netscape-bookmark-tree/example/)
-[中文](README-CN.md)
+[演示](https://zmyjs.github.io/netscape-bookmark-tree/example/) [English](README.md)
 
-Parse the **NETSCAPE-Bookmark-file-1** format bookmarks exported by the browser and convert them into nested arrays.
+解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成嵌套数组。
 
 ---
 
-Bookmark file format:
+书签文件格式：
 
 ```html
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
@@ -24,7 +23,7 @@ Bookmark file format:
 </DL><p>
 ```
 
-Converted format:
+转换后的格式：
 
 ```json
 [
@@ -56,11 +55,11 @@ Converted format:
 ]
 ```
 
-## Basic Usage
+## 使用
 
 ### Node.js
 
-Installation
+安装
 
 ```sh
 npm install netscape-bookmark-tree
@@ -82,13 +81,13 @@ const bookmarkTree = bookmarkParse(string);
 ```js
 const bookmark = require('netscape-bookmark-tree/bookmark.cjs');
 
-// string: bookmark file string
+// string: 书签文件字符串
 const bookmarkTree =  bookmark.parse(string);
 ```
 
-### Browser
+### 浏览器
 
-The browser requires the file to be prefixed with `bookmark.browser`.
+浏览器需要使用带 `bookmark.browser.` 前缀的文件。
 
 #### ESM
 
@@ -108,7 +107,7 @@ The browser requires the file to be prefixed with `bookmark.browser`.
 ```html
 <script src="https://unpkg.com/netscape-bookmark-tree/bookmark.browser.iife.js"></script>
 <script>
-    // string: bookmark file string
+    // string: 书签文件字符串
     const bookmarkTree =  bookmark.parse(string);
 </script>
 ```
@@ -119,10 +118,10 @@ The browser requires the file to be prefixed with `bookmark.browser`.
 
 ```js
 /**
- * Convert bookmarks into a nested array
+ * 解释浏览器导出的书签，转换嵌套数组
  * @param {String} string 
  * @param {Object} options 
- * @returns {Array} tree
+ * @returns {Array} 嵌套数组
  */
 function parse(string, options) {
     return tree;
@@ -131,9 +130,9 @@ function parse(string, options) {
 
 ### bookmarkText
 
-bookmark file string. Merge multiple bookmarks, and repeating, line breaks, indentation, and other formatting will not affect the interpretation.
+书签文件字符串。多书签合并，重复、换行、缩进、等不影响解释。
 
-If you haven't modified the file, the array returned will contain only one object (the root node). If you interpret multiple bookmark files merged together, the function will return an array with multiple objects.
+如果你没有改动文件，返回的数组里面只有一个对象（根节点），如果你把多个书签文件合并一起解释，这样就返回多个对象的数组。
 
 ```js
 const bookmark1 = readFileSync('bookmarks_2019_5_5.html', 'utf-8');
@@ -153,19 +152,19 @@ tree.length;
 ```js
 const options = {
     /**
-    * Iterate over each node and return a new node.
-    * @param {Object} node The node interpreted from the bookmark file
-    * @param {Object} context The context information of the node
-    * @param {Array} context.parentPath The array of parent nodes, for example: [node.parent.parent, node.parent]
-    * @param {Boolean} context.isLeaf Whether the node is a leaf node. You cannot determine this by checking node.children, because when the node is being interpreted, its children have not yet been interpreted.
-    * @param {Object} context.index The index of the node in the current array, which may be used to generate a unique ID.
-    * @returns {Object} The new node
+    * 遍历每个节点，返回新的节点
+    * @param {Object} node 从书签文件解释的节点
+    * @param {Object} context 节点上下文信息
+    * @param {Array} context.parentPath 父节点集合，例如：[node.parent.parent, node.parent]
+    * @param {Boolean} context.isLeaf 是否叶子节点，你不能通过node.children判断，因为解释到该节点时，它的子节点还没开始解释
+    * @param {Object} context.index 节点在当前数组的索引，生成唯一ID可能会用到
+    * @returns {Object} 新的节点
     */
     each(node, context) {
         return node;
     },
     /**
-     * Set the children of the current node
+     * 设置当前节点的子节点
      * @param {Object} node 
      * @param {Array} children 
      */
@@ -177,11 +176,11 @@ const options = {
 
 ## defaultOptions
 
-Default options.
+默认配置。
 
-By default, some contextual properties, such as `id`, will be added to the node object `node`, and the child nodes will be stored in `node.children`.
+默认的情况下，会给节点对象`node`添加一些上下文属性，例如`id`等，子节点存放在`node.children`。
 
-If you want to customize the configuration but still maintain the system's default features, you can handle it in the following way:
+如果你希望自定义配置之后，仍然保持系统默认特性，那么可以这样处理：
 
 ```js
 bookmark.parse(string, {
@@ -192,11 +191,11 @@ bookmark.parse(string, {
 });
 ```
 
-## Custom Usage
+## 自定义应用
 
-Although there are only two custom options, they provide enough flexibility.
+虽然只有两个自定义选项，但是已经足够自由。
 
-### Custom Node Properties
+### 自定义节点属性
 
 ```js
 bookmark.parse(string, {
@@ -210,9 +209,9 @@ bookmark.parse(string, {
 });
 ```
 
-### Return Different Nodes
+### 返回不一样的节点
 
-For example, if you want each node to be a DOM element, you can still achieve that.
+例如你希望每个节点都是DOM，依然可以做到。
 
 ```js
 const [li] = bookmark.parse(string, {
@@ -236,11 +235,11 @@ const [li] = bookmark.parse(string, {
             li.appendChild(ul);
         }
 
-        // Element
+        // 返回的是 Element
         return li;
     },
     setChildren(li, children) {
-        // Adding child nodes to an Element is no longer a simple attribute addition
+        // 为 Element 添加子节点不再是简单添加属性
         children.forEach(function (el) {
             li.children[1].appendChild(el);
         });
@@ -253,15 +252,15 @@ ul.appendChild(li);
 document.body.appendChild(ul);
 ```
 
-## Migrating from v1 to v2
+## 从v1迁移到v2
 
-v2 has been refactored and the API is not complicated. It is recommended to read the documentation again.
+v2版本已经重构，并且API并不复杂，建议重新阅读文档。
 
-- The imported files have changed and need to be distinguished between browser mode and Node.js mode.
-- The entry point has changed, and the module now exports `{ defaultOptions, parse }`.
-- The options `name` and `split` have been removed and replaced with `each`.
-- The option `children` has been removed and replaced with `setChildren`.
+- 引用的文件变更，需要区分浏览器模式和Node.js模式
+- 入口变更，现在模块会导出`{ defaultOptions, parse }`
+- 废除选项`name`、`split`，使用`each`代替
+- 废除选项`children`，使用`setChildren`代替
 
-## License
+## 许可证
 
 [MIT](LICENSE)
