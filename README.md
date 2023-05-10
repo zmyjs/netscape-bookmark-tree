@@ -51,7 +51,7 @@
 ]
 ```
 
-[演示](https:/zmyjs.github.io/netscape-bookmark-tree/example/)
+[演示](https://zmyjs.github.io/netscape-bookmark-tree/example/)
 
 ## 使用
 
