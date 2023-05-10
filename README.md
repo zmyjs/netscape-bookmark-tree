@@ -1,5 +1,7 @@
 # NETSCAPE-Bookmark-tree
 
+[![npm](https://img.shields.io/npm/v/netscape-bookmark-tree.svg?color=%23CB3837)](https://www.npmjs.com/package/netscape-bookmark-tree)
+
 解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成嵌套数组。
 
 书签格式：
@@ -48,6 +50,8 @@
     }
 ]
 ```
+
+[演示](https:/zmyjs.github.io/netscape-bookmark-tree/example/)
 
 ## 使用
 
