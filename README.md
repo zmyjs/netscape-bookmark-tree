@@ -148,8 +148,6 @@ tree.length;
 
 ### options
 
-配置选项
-
 ```js
 const options = {
     /**
