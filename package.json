@@ -7,8 +7,8 @@
         "bookmark",
         "NETSCAPE-Bookmark"
     ],
-    "homepage": "https://zmyjs.github.io/netscape-bookmark-tree",
-    "description": "Parse a 'NETSCAPE-Bookmark-file-1' style bookmarks string into nested array",
+    "homepage": "https://zmyjs.github.io/netscape-bookmark-tree/example/",
+    "description": "解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成嵌套数组",
     "scripts": {
         "build": "rollup -c",
         "test": "mocha test/node.js"
