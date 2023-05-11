@@ -158,6 +158,7 @@ const options = {
     * @param {Array} context.parentPath 父节点集合，例如：[node.parent.parent, node.parent]
     * @param {Boolean} context.isLeaf 是否叶子节点，你不能通过node.children判断，因为解释到该节点时，它的子节点还没开始解释
     * @param {Object} context.index 节点在当前数组的索引，生成唯一ID可能会用到
+    * @param {Array} context.attributes 节点属性的数组形式，如果要转换回书签字符串可能会用到
     * @returns {Object} 新的节点
     */
     each(node, context) {

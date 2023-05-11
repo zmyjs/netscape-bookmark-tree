@@ -1,8 +1,10 @@
 export default function (bookmark, assert, text, afterParse, afterStringify) {
+    const eol = '\n';
+
     const info = {
         aLength: 0,
         hLength: 0,
-        text1: text.replace(/\r\n/g, '\n')
+        text1: text.replace(/\r\n/g, eol)
     };
 
     const tree = bookmark.parse(text, {
@@ -13,11 +15,11 @@ export default function (bookmark, assert, text, afterParse, afterStringify) {
                 info.hLength++;
             }
             node.attributes = context.attributes;
-            return bookmark.defaultParseOptions.each(node, context);
+            return bookmark.defaultOptions.parse.each(node, context);
         }
     });
 
-    info.text2 = bookmark.stringify(tree);
+    info.text2 = bookmark.stringify(tree, { eol })[0];
 
     describe('parse', function () {
         it('验证根节点', function () {

@@ -14,6 +14,7 @@ export const defaultParseOptions = {
     * @param {Array} context.parentPath 父节点集合，例如：[node.parent.parent, node.parent]
     * @param {Boolean} context.isLeaf 是否叶子节点，你不能通过node.children判断，因为解释到该节点时，它的子节点还没开始解释
     * @param {Object} context.index 节点在当前数组的索引，生成唯一ID可能会用到
+    * @param {Array} context.attributes 节点属性的数组形式，如果要转换回书签字符串可能会用到
     * @returns {Object} 新的节点
     */
     each(node, context) {
@@ -41,17 +42,15 @@ export const defaultParseOptions = {
     }
 };
 
-
 /**
- * 解释书签核心方法
+ * 把书签字符串转换成书签树
  * @param {Object} parseConfig HTML解释器配置
  * @param {String} string 书签字符串
- * @param {Object} options 嵌套数组
- * @returns 
+ * @param {Function} each 遍历每个节点，返回新的节点
+ * @param {Function} setChildren 设置当前节点的子节点
+ * @returns {Array} 嵌套数组
  */
-export function bookmarkParse(parseConfig, string, options) {
-    options = Object.assign({}, defaultParseOptions, options);
-
+export function bookmarkParse(parseConfig, string, each, setChildren) {
     function iterator(rawNodes, parentPath) {
         const nodes = [];
 
@@ -65,7 +64,7 @@ export function bookmarkParse(parseConfig, string, options) {
                 };
                 const attributes = parseConfig.setAttrs(node, rawNode);
                 const context = { parentPath, isLeaf, index, attributes, tag };
-                node = options.each(node, context, rawNode) || node;
+                node = each(node, context, rawNode) || node;
                 nodes.push(node);
             }
 
@@ -77,7 +76,7 @@ export function bookmarkParse(parseConfig, string, options) {
                 const node = nodes[nodes.length - 1];
                 const nodePath = parentPath.concat(node);
                 const children = iterator(rawNode.childNodes, nodePath);
-                options.setChildren(node, children);
+                setChildren(node, children);
             }
         });
 
@@ -90,7 +89,14 @@ export function bookmarkParse(parseConfig, string, options) {
     return tree;
 }
 
-export function bookmarkStringify(tree, callback = identity, childKey = 'children') {
+/**
+ * 把书签树转换成书签字符串
+ * @param {Array} tree 书签树
+ * @param {Function} each 遍历每个节点，返回 { children, name, attributes }
+ * @param {String} eol
+ * @returns {Array} 书签字符串列表，每个元素代表一个书签文件
+ */
+export function bookmarkStringify(tree, each, eol) {
     const indent = '    ';
 
     function getAttrStr(attrs) {
@@ -103,27 +109,18 @@ export function bookmarkStringify(tree, callback = identity, childKey = 'childre
 
     function iterator(nodes, parentPath) {
         return nodes.reduce(function (html, node) {
+            const { children, name, attributes } = each(node, parentPath);
             const nodePath = parentPath.concat(node);
-            const nodeIndent = parentPath.reduce(t => t + indent, '\n');
-            node = callback(node, nodePath);
-            const children = node[childKey];
-            const name = node.name;
-            const attrs = getAttrStr(node.attributes);
+            const nodeIndent = [null].concat(parentPath).reduce(t => t + indent, eol);
+            const attrs = getAttrStr(attributes);
+
             let nodehtml;
 
             if (children && children.length) {
                 const childHTML = iterator(children, nodePath);
 
-                let start;
-
-                if (parentPath.length) {
-                    start = `<DT><H3${attrs}>${name}</H3>`;
-                } else {
-                    start = `<H1>${name}</H1>`;
-                }
-
                 nodehtml = [
-                    start,
+                    `<DT><H3${attrs}>${name}</H3>`,
                     '<DL><p>',
                     indent + childHTML,
                     '</DL><p>'
@@ -136,19 +133,26 @@ export function bookmarkStringify(tree, callback = identity, childKey = 'childre
         }, '');
     }
 
-    let html = iterator(tree, []);
+    const files = tree.map(function (root) {
+        const { children, name } = each(root);
+        let html = iterator(children, []);
 
-    html = `
+        html = `
 <!DOCTYPE NETSCAPE-Bookmark-file-1>
 <!-- This is an automatically generated file.
      It will be read and overwritten.
      DO NOT EDIT! -->
 <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 <TITLE>Bookmarks</TITLE>
-${html}
+<H1>${name}</H1>
+<DL><p>
+${indent}${html}
+</DL><p>
 `;
+        html = html.trimStart();
 
-    html = html.trimStart();
+        return html;
+    });
 
-    return html;
+    return files;
 }
