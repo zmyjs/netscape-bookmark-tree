@@ -173,7 +173,7 @@ const options = {
 };
 ```
 
-## defaultParseOptions
+## defaultOptions
 
 Default options.
 
@@ -185,7 +185,7 @@ If you want to customize the configuration but still maintain the system's defau
 bookmark.parse(string, {
     each(node, context) {
         node.dearFather = lodash.last(context.parentPath);
-        return bookmark.defaultParseOptions(node, context);
+        return bookmark.defaultOptions.parse(node, context);
     }
 });
 ```

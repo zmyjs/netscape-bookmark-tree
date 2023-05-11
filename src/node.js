@@ -1,6 +1,6 @@
-import { parseFragment } from 'parse5';
 import os from 'node:os';
-import { bookmarkParse, bookmarkStringify, defaultParseOptions, identity } from './utils.js';
+import { parseFragment } from 'parse5';
+import { bookmarkParse, bookmarkStringify, parseDefaultOptions, identity } from './utils.js';
 
 const parseConfig = {
     parseHTML(html) {
@@ -19,7 +19,7 @@ const parseConfig = {
 };
 
 const defaultOptions = {
-    parse: defaultParseOptions,
+    parse: parseDefaultOptions,
     stringify: {
         each: identity,
         eol: os.EOL

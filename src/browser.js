@@ -1,4 +1,4 @@
-import { bookmarkParse, bookmarkStringify, defaultParseOptions, identity } from './utils.js';
+import { bookmarkParse, bookmarkStringify, parseDefaultOptions, identity } from './utils.js';
 
 const parseConfig = {
     parseHTML(html) {
@@ -21,7 +21,7 @@ const parseConfig = {
 };
 
 const defaultOptions = {
-    parse: defaultParseOptions,
+    parse: parseDefaultOptions,
     stringify: {
         each: identity,
         eol: '\n'

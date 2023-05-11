@@ -6,7 +6,7 @@ export function identity(p) {
     return p;
 }
 
-export const defaultParseOptions = {
+export const parseDefaultOptions = {
     /**
     * 遍历每个节点，返回新的节点
     * @param {Object} node 从书签文件解释的节点

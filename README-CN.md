@@ -175,7 +175,7 @@ const options = {
 };
 ```
 
-## defaultParseOptions
+## defaultOptions
 
 默认配置。
 
@@ -187,7 +187,7 @@ const options = {
 bookmark.parse(string, {
     each(node, context) {
         node.dearFather = lodash.last(context.parentPath);
-        return bookmark.defaultParseOptions(node, context);
+        return bookmark.defaultOptions.parse(node, context);
     }
 });
 ```
