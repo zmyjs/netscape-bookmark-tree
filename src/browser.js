@@ -1,4 +1,4 @@
-import { bookmarkParse, defaultOptions } from './utils.js';
+import { bookmarkParse, bookmarkStringify, defaultParseOptions } from './utils.js';
 
 const parseConfig = {
     parseHTML(html) {
@@ -8,13 +8,15 @@ const parseConfig = {
     },
     getTag: node => node.nodeName.toLowerCase(),
     getName: node => node.textContent,
-    getAttrs: node => Array.from(node.attributes),
-    addAttrs(node, htmlNode) {
-        const attrs = htmlNode.attributes;
-        for (let i = 0; i < attrs.length; i++) {
-            const attr = attrs[i];
+    setAttrs(node, htmlNode) {
+        const srcAttrs = htmlNode.attributes;
+        const attrs = [];
+        for (let i = 0; i < srcAttrs.length; i++) {
+            const attr = srcAttrs[i];
             node[attr.name] = attr.value;
+            attrs.push(attr);
         }
+        return attrs;
     }
 };
 
@@ -28,6 +30,8 @@ function parse(string, options) {
     return bookmarkParse(parseConfig, string, options);
 }
 
-export { defaultOptions, parse };
+const stringify = bookmarkStringify;
+
+export { defaultParseOptions, parse, stringify };
 
 export default parse;

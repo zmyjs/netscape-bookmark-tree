@@ -174,7 +174,7 @@ const options = {
 };
 ```
 
-## defaultOptions
+## defaultParseOptions
 
 默认配置。
 
@@ -186,7 +186,7 @@ const options = {
 bookmark.parse(string, {
     each(node, context) {
         node.dearFather = lodash.last(context.parentPath);
-        return bookmark.defaultOptions(node, context);
+        return bookmark.defaultParseOptions(node, context);
     }
 });
 ```
@@ -252,12 +252,27 @@ ul.appendChild(li);
 document.body.appendChild(ul);
 ```
 
+## 测试
+
+### Node.js
+
+```sh
+npm test
+```
+
+### 浏览器
+
+```sh
+npm start
+```
+打开网页：http://localhost:3000/test/browser
+
 ## 从v1迁移到v2
 
 v2版本已经重构，并且API并不复杂，建议重新阅读文档。
 
 - 引用的文件变更，需要区分浏览器模式和Node.js模式
-- 入口变更，现在模块会导出`{ defaultOptions, parse }`
+- 入口变更，现在模块会导出`{ defaultParseOptions, parse }`
 - 废除选项`name`、`split`，使用`each`代替
 - 废除选项`children`，使用`setChildren`代替
 

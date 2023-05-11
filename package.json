@@ -10,13 +10,15 @@
     "homepage": "https://zmyjs.github.io/netscape-bookmark-tree/example/",
     "description": "Parse the NETSCAPE-Bookmark-file-1 format bookmarks exported by the browser and convert them into nested arrays.",
     "scripts": {
-        "build": "rollup -c",
-        "test": "mocha test/node.js"
+        "start": "serve",
+        "test": "mocha test/node.js",
+        "build": "rollup -c"
     },
     "devDependencies": {
         "@rollup/plugin-terser": "^0.4.1",
         "mocha": "^10.2.0",
-        "rollup": "^3.21.5"
+        "rollup": "^3.21.5",
+        "serve": "^14.2.0"
     },
     "type": "module",
     "main": "bookmark.js",
@@ -31,6 +33,7 @@
         "url": "https://github.com/zmyjs/netscape-bookmark-tree/issues"
     },
     "dependencies": {
+        "eslint": "^8.40.0",
         "parse5": "^7.1.2"
     },
     "files": [

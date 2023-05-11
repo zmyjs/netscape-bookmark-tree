@@ -1,5 +1,5 @@
 import { parseFragment } from 'parse5';
-import { bookmarkParse, defaultOptions } from './utils.js';
+import { bookmarkParse, bookmarkStringify, defaultParseOptions } from './utils.js';
 
 const parseConfig = {
     parseHTML(html) {
@@ -8,10 +8,12 @@ const parseConfig = {
     },
     getTag: node => node.nodeName,
     getName: node => node.childNodes[0].value,
-    addAttrs(node, htmlNode) {
-        htmlNode.attrs.forEach(function (attr) {
+    setAttrs(node, htmlNode) {
+        const { attrs } = htmlNode;
+        attrs.forEach(function (attr) {
             node[attr.name] = attr.value;
         });
+        return attrs;
     }
 };
 
@@ -25,6 +27,8 @@ function parse(string, options) {
     return bookmarkParse(parseConfig, string, options);
 }
 
-export { defaultOptions, parse };
+const stringify = bookmarkStringify;
+
+export { defaultParseOptions, parse, stringify };
 
 export default parse;

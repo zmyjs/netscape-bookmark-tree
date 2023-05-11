@@ -2,7 +2,11 @@ export function last(array) {
     return array[array.length - 1];
 }
 
-export const defaultOptions = {
+export function identity(p) {
+    return p;
+}
+
+export const defaultParseOptions = {
     /**
     * 遍历每个节点，返回新的节点
     * @param {Object} node 从书签文件解释的节点
@@ -20,7 +24,7 @@ export const defaultOptions = {
 
         if (parent) {
             node.id = `${parent.id}_${index}`;
-            node.pid = parent.id
+            node.pid = parent.id;
         } else {
             node.id = index.toString();
         }
@@ -35,7 +39,7 @@ export const defaultOptions = {
     setChildren(node, children) {
         node.children = children;
     }
-}
+};
 
 
 /**
@@ -46,7 +50,7 @@ export const defaultOptions = {
  * @returns 
  */
 export function bookmarkParse(parseConfig, string, options) {
-    options = Object.assign({}, defaultOptions, options);
+    options = Object.assign({}, defaultParseOptions, options);
 
     function iterator(rawNodes, parentPath) {
         const nodes = [];
@@ -59,9 +63,9 @@ export function bookmarkParse(parseConfig, string, options) {
                 let node = {
                     name: parseConfig.getName(rawNode),
                 };
-                parseConfig.addAttrs(node, rawNode);
-                const context = { parentPath, isLeaf, index, rawNode };
-                node = options.each(node, context) || node;
+                const attributes = parseConfig.setAttrs(node, rawNode);
+                const context = { parentPath, isLeaf, index, attributes, tag };
+                node = options.each(node, context, rawNode) || node;
                 nodes.push(node);
             }
 
@@ -86,16 +90,65 @@ export function bookmarkParse(parseConfig, string, options) {
     return tree;
 }
 
-export function eachTree(tree, callback) {
-    function iterator(nodes) {
-        nodes.forEach(function (node, index) {
-            callback(node, index);
+export function bookmarkStringify(tree, callback = identity, childKey = 'children') {
+    const indent = '    ';
 
-            if (node.children) {
-                iterator(node.children);
-            }
-        });
+    function getAttrStr(attrs) {
+        return attrs
+            ? attrs.reduce(function (t, v) {
+                return `${t} ${v.name.toUpperCase()}="${v.value}"`;
+            }, '')
+            : '';
     }
 
-    iterator(tree);
+    function iterator(nodes, parentPath) {
+        return nodes.reduce(function (html, node) {
+            const nodePath = parentPath.concat(node);
+            const nodeIndent = parentPath.reduce(t => t + indent, '\n');
+            node = callback(node, nodePath);
+            const children = node[childKey];
+            const name = node.name;
+            const attrs = getAttrStr(node.attributes);
+            let nodehtml;
+
+            if (children && children.length) {
+                const childHTML = iterator(children, nodePath);
+
+                let start;
+
+                if (parentPath.length) {
+                    start = `<DT><H3${attrs}>${name}</H3>`;
+                } else {
+                    start = `<H1>${name}</H1>`;
+                }
+
+                nodehtml = [
+                    start,
+                    '<DL><p>',
+                    indent + childHTML,
+                    '</DL><p>'
+                ].join(nodeIndent);
+            } else {
+                nodehtml = `<DT><A${attrs}>${name}</A>`;
+            }
+
+            return html ? html + nodeIndent + nodehtml : nodehtml;
+        }, '');
+    }
+
+    let html = iterator(tree, []);
+
+    html = `
+<!DOCTYPE NETSCAPE-Bookmark-file-1>
+<!-- This is an automatically generated file.
+     It will be read and overwritten.
+     DO NOT EDIT! -->
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+<TITLE>Bookmarks</TITLE>
+${html}
+`;
+
+    html = html.trimStart();
+
+    return html;
 }

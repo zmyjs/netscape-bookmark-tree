@@ -3,13 +3,14 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Browser Test</title>
+    <title>浏览器端测试</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="../node_modules/mocha/mocha.css" />
     <script src="../node_modules/mocha/mocha.js" defer></script>
     <script type="module">
         import main from './main.js';
         import * as bookmark from "../src/browser.js";
+        import { identity } from '../src/utils.js';
 
         mocha.setup('bdd');
         mocha.checkLeaks();
@@ -25,7 +26,7 @@
             }
         };
 
-        main(bookmark, assert, text);
+        main(bookmark, assert, text, identity, identity);
 
         mocha.run();
     </script>

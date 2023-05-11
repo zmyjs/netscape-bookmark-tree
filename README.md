@@ -173,7 +173,7 @@ const options = {
 };
 ```
 
-## defaultOptions
+## defaultParseOptions
 
 Default options.
 
@@ -185,7 +185,7 @@ If you want to customize the configuration but still maintain the system's defau
 bookmark.parse(string, {
     each(node, context) {
         node.dearFather = lodash.last(context.parentPath);
-        return bookmark.defaultOptions(node, context);
+        return bookmark.defaultParseOptions(node, context);
     }
 });
 ```
@@ -251,12 +251,27 @@ ul.appendChild(li);
 document.body.appendChild(ul);
 ```
 
+## Test
+
+### Node.js
+
+```sh
+npm test
+```
+
+### Browser
+
+```sh
+npm start
+```
+Open this webpage: http://localhost:3000/test/browser
+
 ## Migrating from v1 to v2
 
 v2 has been refactored and the API is not complicated. It is recommended to read the documentation again.
 
 - The imported files have changed and need to be distinguished between browser mode and Node.js mode.
-- The entry point has changed, and the module now exports `{ defaultOptions, parse }`.
+- The entry point has changed, and the module now exports `{ defaultParseOptions, parse }`.
 - The options `name` and `split` have been removed and replaced with `each`.
 - The option `children` has been removed and replaced with `setChildren`.
 
