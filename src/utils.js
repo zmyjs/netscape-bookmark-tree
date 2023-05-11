@@ -102,7 +102,7 @@ export function bookmarkStringify(tree, each, eol) {
     function getAttrStr(attrs) {
         return attrs
             ? attrs.reduce(function (t, v) {
-                return `${t} ${v.name.toUpperCase()}="${v.value}"`;
+                return `${t} ${v[0].toUpperCase()}="${v[1]}"`;
             }, '')
             : '';
     }
@@ -111,20 +111,25 @@ export function bookmarkStringify(tree, each, eol) {
         return nodes.reduce(function (html, node) {
             const { children, name, attributes } = each(node, parentPath);
             const nodePath = parentPath.concat(node);
-            const nodeIndent = [null].concat(parentPath).reduce(t => t + indent, eol);
+            const nodeIndent = parentPath.reduce(t => t + indent, eol + indent);
             const attrs = getAttrStr(attributes);
 
             let nodehtml;
 
-            if (children && children.length) {
+            if (children) {
                 const childHTML = iterator(children, nodePath);
-
-                nodehtml = [
+                const nodehtmllist = [
                     `<DT><H3${attrs}>${name}</H3>`,
                     '<DL><p>',
                     indent + childHTML,
                     '</DL><p>'
-                ].join(nodeIndent);
+                ];
+
+                if (children.length === 0) {
+                    nodehtmllist.splice(2, 1);
+                }
+
+                nodehtml = nodehtmllist.join(nodeIndent);
             } else {
                 nodehtml = `<DT><A${attrs}>${name}</A>`;
             }

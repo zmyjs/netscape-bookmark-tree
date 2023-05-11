@@ -11,10 +11,10 @@ const parseConfig = {
     getName: node => node.childNodes[0].value,
     setAttrs(node, htmlNode) {
         const { attrs } = htmlNode;
-        attrs.forEach(function (attr) {
+        return attrs.map(function (attr) {
             node[attr.name] = attr.value;
+            return [attr.name, attr.value];
         });
-        return attrs;
     }
 };
 

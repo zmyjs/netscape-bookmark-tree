@@ -1,4 +1,4 @@
-export default function (bookmark, assert, text, afterParse, afterStringify) {
+export default function (bookmark, assert, text, afterDescribe) {
     const eol = '\n';
 
     const info = {
@@ -8,13 +8,14 @@ export default function (bookmark, assert, text, afterParse, afterStringify) {
     };
 
     const tree = bookmark.parse(text, {
-        each(node, context) {
+        each(node, context, rawNode) {
             if (context.isLeaf) {
                 info.aLength++;
             } else {
                 info.hLength++;
             }
-            node.attributes = context.attributes;
+            node.rawNode = rawNode;
+            Object.assign(node, context);
             return bookmark.defaultOptions.parse.each(node, context);
         }
     });
@@ -35,15 +36,13 @@ export default function (bookmark, assert, text, afterParse, afterStringify) {
             const m = text.match(/<\/H3>|<\/H1>/g);
             assert.equal(info.hLength, m.length);
         });
-
-        afterParse(tree, info);
     });
 
     describe('stringify', function () {
         it('转换成字符串并与源字符串对比', function () {
             assert.equal(info.text1, info.text2);
         });
-
-        afterStringify(tree, info);
     });
+
+    afterDescribe(tree, info);
 }

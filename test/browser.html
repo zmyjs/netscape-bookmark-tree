@@ -10,7 +10,6 @@
     <script type="module">
         import main from './main.js';
         import * as bookmark from "../src/browser.js";
-        import { identity } from '../src/utils.js';
 
         mocha.setup('bdd');
         mocha.checkLeaks();
@@ -26,7 +25,7 @@
             }
         };
 
-        main(bookmark, assert, text, identity, identity);
+        main(bookmark, assert, text, console.info);
 
         mocha.run();
     </script>

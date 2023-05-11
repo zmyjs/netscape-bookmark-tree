@@ -14,7 +14,7 @@ const parseConfig = {
         for (let i = 0; i < srcAttrs.length; i++) {
             const attr = srcAttrs[i];
             node[attr.name] = attr.value;
-            attrs.push(attr);
+            attrs.push([attr.name, attr.value]);
         }
         return attrs;
     }
