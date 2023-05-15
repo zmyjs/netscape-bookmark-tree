@@ -92,8 +92,8 @@ export function bookmarkParse(parseConfig, string, each, setChildren) {
 /**
  * 把书签树转换成书签字符串
  * @param {Array} tree 书签树
- * @param {Function} each 遍历每个节点，返回 { children, name, attributes }
- * @param {String} eol
+ * @param {Function} each 遍历每个节点；参数：each(node, parentPath)；返回对象：{ name, attributes, children }
+ * @param {String} eol 换行符
  * @returns {Array} 书签字符串列表，每个元素代表一个书签文件
  */
 export function bookmarkStringify(tree, each, eol) {
@@ -109,7 +109,7 @@ export function bookmarkStringify(tree, each, eol) {
 
     function iterator(nodes, parentPath) {
         return nodes.reduce(function (html, node) {
-            const { children, name, attributes } = each(node, parentPath);
+            const { name, attributes, children } = each(node, parentPath);
             const nodePath = parentPath.concat(node);
             const nodeIndent = parentPath.reduce(t => t + indent, eol + indent);
             const attrs = getAttrStr(attributes);

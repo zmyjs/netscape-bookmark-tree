@@ -39,9 +39,9 @@ function parse(string, options) {
 
 /**
  * 把书签树转换成书签字符串
- * @param {*} tree 
- * @param {*} options 
- * @returns 
+ * @param {Array} tree 书签字树
+ * @param {Object} options 选项
+ * @returns {Array} 书签字符串列表
  */
 function stringify(tree, options) {
     options = Object.assign({}, defaultOptions.stringify, options);

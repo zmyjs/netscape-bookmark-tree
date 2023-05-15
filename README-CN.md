@@ -119,8 +119,8 @@ const bookmarkTree =  bookmark.parse(string);
 ```js
 /**
  * 解释浏览器导出的书签，转换嵌套数组
- * @param {String} string 
- * @param {Object} options 
+ * @param {String} string 书签字符串
+ * @param {Object} options 选项，默认值：defaultOptions.parse
  * @returns {Array} 嵌套数组
  */
 function parse(string, options) {
@@ -128,31 +128,30 @@ function parse(string, options) {
 }
 ```
 
-### bookmarkText
+### string
 
 书签文件字符串。多书签合并，重复、换行、缩进、等不影响解释。
 
 如果你没有改动文件，返回的数组里面只有一个对象（根节点），如果你把多个书签文件合并一起解释，这样就返回多个对象的数组。
 
 ```js
-const bookmark1 = readFileSync('bookmarks_2019_5_5.html', 'utf-8');
-const bookmark2 = readFileSync('bookmarks_2023_5_9.html', 'utf-8');
-const bookmark3 = bookmark2.replace(/\n/g, '');
+const bookmark0 = readFileSync('bookmarks_2023_5_5.html', 'utf-8');
+const bookmark1 = bookmark0.replace(/\n/g, '');
 
-const tree = bookmark.parse(bookmark1 + bookmark2 + bookmark3);
-
+const tree = bookmark.parse(bookmark0 + bookmark1);
 tree.length;
-// 3
+// 2
 ```
 
 ### options
 
-配置选项
+选项，下面是全部属性。
 
 ```js
 const options = {
     /**
     * 遍历每个节点，返回新的节点
+    * 本函数并不是默认值，默认值会为node添加几个常用属性：{ id, pid, index }
     * @param {Object} node 从书签文件解释的节点
     * @param {Object} context 节点上下文信息
     * @param {Array} context.parentPath 父节点集合，例如：[node.parent.parent, node.parent]
@@ -166,6 +165,7 @@ const options = {
     },
     /**
      * 设置当前节点的子节点
+     * 默认值为下面函数
      * @param {Object} node 
      * @param {Array} children 
      */
@@ -175,28 +175,9 @@ const options = {
 };
 ```
 
-## defaultOptions
+### 示例
 
-默认配置。
-
-默认的情况下，会给节点对象`node`添加一些上下文属性，例如`id`等，子节点存放在`node.children`。
-
-如果你希望自定义配置之后，仍然保持系统默认特性，那么可以这样处理：
-
-```js
-bookmark.parse(string, {
-    each(node, context) {
-        node.dearFather = lodash.last(context.parentPath);
-        return bookmark.defaultOptions.parse(node, context);
-    }
-});
-```
-
-## 自定义应用
-
-虽然只有两个自定义选项，但是已经足够自由。
-
-### 自定义节点属性
+#### 自定义节点属性
 
 ```js
 bookmark.parse(string, {
@@ -210,7 +191,7 @@ bookmark.parse(string, {
 });
 ```
 
-### 返回不一样的节点
+#### 返回不一样的节点
 
 例如你希望每个节点都是DOM，依然可以做到。
 
@@ -251,6 +232,126 @@ const ul = document.createElement('ul');
 ul.appendChild(li);
 
 document.body.appendChild(ul);
+```
+
+## stringify()
+
+```js
+/**
+ * 把书签树转换成书签字符串
+ * @param {Array} tree 书签字树
+ * @param {Object} options 选项，默认值：defaultOptions.stringify
+ * @returns {Array} 书签字符串列表
+ */
+function stringify(tree, options) {
+    return files;
+}
+```
+
+需要注意的是，该函数是返回数组，而不是字符串。原因见下面参数说明。
+
+### tree
+
+书签树，对应于`parse()`返回的结构。
+
+由于`parse()`支持多书签文件合并一起解释，`parse()`返回的数组，每个元素都代表一个书签树的根。因此`stringify()`的返回值也是数组，数组每元素都是一个书签文件字符串。
+
+```js
+const bookmark0 = readFileSync('bookmarks_2019_5_5.html', 'utf-8');
+const bookmark1 = readFileSync('bookmarks_2023_5_9.html', 'utf-8');
+// 转换成树
+const tree = bookmark.parse(bookmark0 + bookmark1, {
+    each(node, context) {
+        // 转换成树之后，我们通常不关心属性的顺序，但是如果需要还原成字符串，就需要带上属性的顺序
+        node.attributes = context.attributes;
+        // 例如：{ name: 'github', href: 'https://github.com/', attributes:[{name: 'href', value: 'https://github.com/'}] }
+        return node;
+    }
+});
+// 还原成字符串
+const files = bookmark.stringify(tree);
+
+files.length === tree.length;
+// true
+files[0] === bookmark0;
+// true
+files[1] === bookmark1;
+// true
+```
+如果书签名带有`&amp`等HTML转义序列，上面例子会出现`files[0]`不等于`bookmark0`，但是不影响使用。
+
+### options
+
+选项，下面是全部属性。
+
+```js
+const options = {
+    /**
+     * 把书签树转换成书签字符串
+     * 默认值为下面函数
+     * @param {Array} node 书签树节点
+     * @param {Array} parentPath 父节点集合
+     * @returns {Object} 返回对象：{ name, attributes, children }
+     */
+    each(node, parentPath) {
+        return node;
+    },
+    // 换行符。在 Node.js 环境下，默认值为os.EOL；在浏览器环境下，默认值为'\n'。
+    eol: '\n'
+};
+```
+
+### 示例
+
+```js
+const tree = bookmark.parse(text, {
+    each(node, context) {
+        return {
+            myName: node.name,
+            myAttrs: context.attributes
+        };
+    },
+    setChildren(node, children) {
+        node.myChild = children;
+    }
+});
+
+const files = bookmark.stringify(tree, {
+    each(node) {
+        return {
+            name: node.myName
+            attributes: node.myAttrs,
+            children: node.myChild, 
+        };
+    }
+});
+
+files[0] === text;
+// true
+```
+
+## defaultOptions
+
+默认选项。
+
+```js
+const defaultOptions = {
+    // parse() 默认选项
+    parse: {},
+    // stringify() 默认选项
+    stringify: {}
+};
+```
+
+如果你希望自定义配置之后，仍然保持系统默认特性，那么可以这样处理。
+
+```js
+bookmark.parse(string, {
+    each(node, context) {
+        node.dearFather = lodash.last(context.parentPath);
+        return bookmark.defaultOptions.parse(node, context);
+    }
+});
 ```
 
 ## 测试
