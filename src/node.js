@@ -49,5 +49,3 @@ function stringify(tree, options) {
 }
 
 export { parse, stringify, defaultOptions };
-
-export default parse;

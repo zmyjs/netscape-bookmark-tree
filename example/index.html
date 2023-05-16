@@ -23,71 +23,15 @@
         }
 
         header {
-            padding: 1rem;
             background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
-        h1 {
-            margin: 0;
-            font-size: 1.5rem;
-        }
-
-        h1 a {
+        a {
             text-decoration: none;
-            color: black;
-        }
-
-        main {
-            display: flex;
-            flex-grow: 1;
-            height: 0;
-        }
-
-        footer {
-            padding: 0.5rem;
-            text-align: center;
-            font-size: 12px;
-            background-color: #eeeeee;
-            color: gray;
-        }
-
-        main section {
-            flex: 1;
-            overflow: auto;
-        }
-
-        #result-dom .icon {
-            width: 1rem;
-            margin-right: 0.5rem;
-            display: inline-block;
-        }
-
-        #result-dom span.icon {
-            text-align: center;
-            color: gray;
-            font-size: 12px;
-            background-color: whitesmoke;
-        }
-
-        #result-dom .fold {
-            cursor: pointer;
-            width: 1.25rem;
-            margin-right: 0.5rem;
-            padding: 0;
-            text-align: center;
-        }
-
-        #result-dom li {
-            margin: 0.5rem;
         }
 
         pre {
             font-family: Consolas, 'Courier New', Courier, monospace;
-            background-color: #222222;
-            color: whitesmoke;
             padding: 1rem;
             margin: 0;
             font-size: 12px;
@@ -99,23 +43,77 @@
             padding-left: 1rem;
         }
 
-        #control p {
-            margin-top: 0.5rem;
-            margin-bottom: 0;
+        h1 {
+            margin: 0.5rem;
+            text-align: center;
+        }
+
+        h1 a {
+            color: black;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        main {
+            flex-grow: 1;
+            height: 0;
+            display: flex;
+        }
+
+        form {
+            padding: 1rem;
+            background-color: whitesmoke;
+        }
+
+        footer {
+            padding: 0.5rem;
+            text-align: center;
             font-size: 12px;
+            color: gray;
+        }
+
+        .result {
+            flex: 1;
+            overflow: auto;
+        }
+
+        #dom .icon {
+            width: 1.3rem;
+            margin-right: 0.5rem;
+            display: inline-block;
+            vertical-align: top;
+        }
+
+        #dom span.icon {
+            text-align: center;
+            color: gray;
+            font-size: 12px;
+            background-color: whitesmoke;
+            line-height: 1.3rem;
+        }
+
+        #dom button.icon {
+            cursor: pointer;
+            padding: 0;
+        }
+
+        #dom li {
+            margin: 0.5rem;
         }
     </style>
     <script type="module">
-        import { parse as bookmarkParse } from "./src/browser.js";
+        import * as bookmark from "./bookmark.browser.js";
+
+        console.log(bookmark);
 
         function toJSON(text) {
-            const tree = bookmarkParse(text);
+            const tree = bookmark.parse(text);
+            document.getElementById('json').textContent = JSON.stringify(tree, undefined, ' ');
             console.log(tree);
-            document.getElementById('result-json').textContent = JSON.stringify(tree, undefined, ' ');
         }
 
         function toDOM(text) {
-            const dom = bookmarkParse(text, {
+            const dom = bookmark.parse(text, {
                 each(node, context) {
                     const li = document.createElement('li');
 
@@ -141,7 +139,7 @@
                         const ul = document.createElement('ul');
 
                         const fold = document.createElement('button');
-                        fold.className = 'fold';
+                        fold.className = 'icon';
                         const updateFold = function () {
                             fold.textContent = ul.hidden ? '+' : '-';
                         }
@@ -169,20 +167,30 @@
                 }
             });
 
-            const ul = document.getElementById('result-dom')
+            const ul = document.getElementById('dom')
             ul.innerHTML = '';
             dom.forEach(li => ul.appendChild(li));
         }
 
         function update(res) {
             res.text().then(function (text) {
-                document.getElementById('bookmark-file').textContent = text;
+                document.getElementById('text').textContent = text;
                 toJSON(text);
                 toDOM(text);
             }, function () {
                 alert('数据错误');
             });
         }
+
+        document.getElementById('toggle').addEventListener('click', function () {
+            const dom = document.getElementById('dom'),
+                json = document.getElementById('json');
+
+            const hide = dom.hidden;
+
+            dom.hidden = !hide;
+            json.hidden = hide;
+        });
 
         document.getElementById('transform').addEventListener('click', function () {
             const file = document.getElementById('input-file').files[0];
@@ -205,26 +213,23 @@
                 <a href="https://github.com/zmyjs/netscape-bookmark-tree" target="_blank"
                     rel="noopener noreferrer">NETSCAPE-Bookmark-tree</a>
             </h1>
-            <div id="control">
-                <form>
-                    <input id="input-file" type="file" name="file">
-                    <button type="button" id="transform">转换</button>
-                </form>
-                <p>
-                    选择书签文件，点击转换可查看效果，控制台也会输出；书签文件会在本地进行处理，不会发送到任何服务器。
-                </p>
-            </div>
         </header>
 
+        <form>
+            <input id="input-file" type="file" name="file">
+            <button type="button" id="transform">转换</button>
+            <button type="button" id="toggle">切换</button>
+
+            <i>文件会在本地进行处理，不会发送到任何服务器。The file will be processed locally and will not be sent to any server.</i>
+        </form>
+
         <main>
-            <section>
-                <pre id="bookmark-file"></pre>
+            <section class="result">
+                <pre id="text"></pre>
             </section>
-            <section>
-                <ul id="result-dom"></ul>
-            </section>
-            <section>
-                <pre id="result-json"></pre>
+            <section class="result">
+                <ul id="dom"></ul>
+                <pre id="json" hidden></pre>
             </section>
         </main>
 
