@@ -4,7 +4,7 @@
 
 [演示](https://zmyjs.github.io/netscape-bookmark-tree/example/) [English](README.md)
 
-解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成嵌套数组。
+解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成嵌套数组，也可以把嵌套数组转换回书签。
 
 ---
 
@@ -319,7 +319,7 @@ const tree = bookmark.parse(text, {
 const files = bookmark.stringify(tree, {
     each(node) {
         return {
-            name: node.myName
+            name: node.myName,
             attributes: node.myAttrs,
             children: node.myChild, 
         };
