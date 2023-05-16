@@ -4,7 +4,7 @@
 
 [演示](https://zmyjs.github.io/netscape-bookmark-tree/example/) [English](README.md)
 
-解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成嵌套数组，也可以把嵌套数组转换回书签。
+解释浏览器导出的 **NETSCAPE-Bookmark-file-1** 格式书签，转换成树结构，也可以把树结构转换回书签。
 
 ---
 
@@ -55,7 +55,7 @@
 ]
 ```
 
-## 使用
+## 基本使用
 
 ### Node.js
 
@@ -114,21 +114,27 @@ const bookmarkTree =  bookmark.parse(string);
 
 ## API
 
-## parse()
+```js
+import { parse, stringify, defaultOptions } from 'netscape-bookmark-tree';
+```
+
+### parse()
 
 ```js
 /**
- * 解释浏览器导出的书签，转换嵌套数组
+ * 把书签字符串转换成树结构
  * @param {String} string 书签字符串
- * @param {Object} options 选项，默认值：defaultOptions.parse
- * @returns {Array} 嵌套数组
+ * @param {Object} options 选项，默认值：`defaultOptions.parse`
+ * @returns {Array} 树
  */
 function parse(string, options) {
     return tree;
 }
 ```
 
-### string
+#### 参数
+
+- string
 
 书签文件字符串。多书签合并，重复、换行、缩进、等不影响解释。
 
@@ -143,7 +149,7 @@ tree.length;
 // 2
 ```
 
-### options
+- options
 
 选项，下面是全部属性。
 
@@ -151,11 +157,11 @@ tree.length;
 const options = {
     /**
     * 遍历每个节点，返回新的节点
-    * 本函数并不是默认值，默认值会为node添加几个常用属性：{ id, pid, index }
+    * 本函数并不是默认值，默认值会为node添加几个常用属性：`{ id, pid, index }`
     * @param {Object} node 从书签文件解释的节点
     * @param {Object} context 节点上下文信息
-    * @param {Array} context.parentPath 父节点集合，例如：[node.parent.parent, node.parent]
-    * @param {Boolean} context.isLeaf 是否叶子节点，你不能通过node.children判断，因为解释到该节点时，它的子节点还没开始解释
+    * @param {Array} context.parentPath 父节点集合，例如：`[node.parent.parent, node.parent]`
+    * @param {Boolean} context.isLeaf 是否叶子节点，你不能通过`node.children`判断，因为解释到该节点时，它的子节点还没开始解释
     * @param {Object} context.index 节点在当前数组的索引，生成唯一ID可能会用到
     * @param {Array} context.attributes 节点属性的数组形式，如果要转换回书签字符串可能会用到
     * @returns {Object} 新的节点
@@ -175,9 +181,9 @@ const options = {
 };
 ```
 
-### 示例
+#### 自定义使用
 
-#### 自定义节点属性
+- 自定义节点属性
 
 ```js
 bookmark.parse(string, {
@@ -191,7 +197,7 @@ bookmark.parse(string, {
 });
 ```
 
-#### 返回不一样的节点
+- 返回不一样的节点
 
 例如你希望每个节点都是DOM，依然可以做到。
 
@@ -234,13 +240,13 @@ ul.appendChild(li);
 document.body.appendChild(ul);
 ```
 
-## stringify()
+### stringify()
 
 ```js
 /**
  * 把书签树转换成书签字符串
  * @param {Array} tree 书签字树
- * @param {Object} options 选项，默认值：defaultOptions.stringify
+ * @param {Object} options 选项，默认值：`defaultOptions.stringify`
  * @returns {Array} 书签字符串列表
  */
 function stringify(tree, options) {
@@ -250,7 +256,9 @@ function stringify(tree, options) {
 
 需要注意的是，该函数是返回数组，而不是字符串。原因见下面参数说明。
 
-### tree
+#### 参数
+
+- tree
 
 书签树，对应于`parse()`返回的结构。
 
@@ -280,28 +288,31 @@ files[1] === bookmark1;
 ```
 如果书签名带有`&amp`等HTML转义序列，上面例子会出现`files[0]`不等于`bookmark0`，但是不影响使用。
 
-### options
+- options
 
 选项，下面是全部属性。
 
 ```js
 const options = {
     /**
-     * 把书签树转换成书签字符串
+     * 每个节点的回调函数
      * 默认值为下面函数
      * @param {Array} node 书签树节点
-     * @param {Array} parentPath 父节点集合
-     * @returns {Object} 返回对象：{ name, attributes, children }
+     * @param {Array} parentPath 父节点集合，例如：`[node.parent.parent, node.parent]`
+     * @returns {Object} 返回这个对象：`{ name, attributes, children }`
+     * @property {number} name 标签名。必须
+     * @property {number} attributes 属性列表，数组每个元素为：`{ name, value }`。必须
+     * @property {number} [children] 如果children为数组，会转换成`<H3>`标签，不管数组有没有元素；反之转换成`<A>`标签。可选
      */
     each(node, parentPath) {
         return node;
     },
-    // 换行符。在 Node.js 环境下，默认值为os.EOL；在浏览器环境下，默认值为'\n'。
+    // 换行符。在 Node.js 环境下，默认值为`os.EOL`；在浏览器环境下，默认值为'\n'。
     eol: '\n'
 };
 ```
 
-### 示例
+#### 自定义使用
 
 ```js
 const tree = bookmark.parse(text, {
@@ -330,7 +341,7 @@ files[0] === text;
 // true
 ```
 
-## defaultOptions
+### defaultOptions
 
 默认选项。
 
@@ -343,7 +354,7 @@ const defaultOptions = {
 };
 ```
 
-如果你希望自定义配置之后，仍然保持系统默认特性，那么可以这样处理。
+如果你希望自定义配置之后，仍然保持系统默认特性，可以这样处理。
 
 ```js
 bookmark.parse(string, {
@@ -374,7 +385,7 @@ npm start
 v2版本已经重构，并且API并不复杂，建议重新阅读文档。
 
 - 引用的文件变更，需要区分浏览器模式和Node.js模式
-- 入口变更，现在模块会导出`{ defaultParseOptions, parse }`
+- 入口变更，现在模块会导出`{ parse, stringify, defaultOptions }`
 - 废除选项`name`、`split`，使用`each`代替
 - 废除选项`children`，使用`setChildren`代替
 

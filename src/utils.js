@@ -116,7 +116,7 @@ export function bookmarkStringify(tree, each, eol) {
 
             let nodehtml;
 
-            if (children) {
+            if (Array.isArray(children)) {
                 const childHTML = iterator(children, nodePath);
                 const nodehtmllist = [
                     `<DT><H3${attrs}>${name}</H3>`,

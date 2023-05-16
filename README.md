@@ -5,7 +5,7 @@
 [Example](https://zmyjs.github.io/netscape-bookmark-tree/example/)
 [中文](README-CN.md)
 
-Parse the **NETSCAPE-Bookmark-file-1** format bookmarks exported by the browser and convert them into nested arrays.
+Parse the **NETSCAPE-Bookmark-file-1** format bookmarks exported by the browser, convert it into a tree structure, and also convert the tree structure back to bookmarks.
 
 ---
 
@@ -115,13 +115,17 @@ The browser requires the file to be prefixed with `bookmark.browser`.
 
 ## API
 
-## parse()
+```js
+import { parse, stringify, defaultOptions } from 'netscape-bookmark-tree';
+```
+
+### parse()
 
 ```js
 /**
- * Convert bookmarks into a nested array
- * @param {String} string 
- * @param {Object} options 
+ * Convert a bookmark string to a tree structure
+ * @param {String} string bookmark file string
+ * @param {Object} options default: `defaultOptions.parse`
  * @returns {Array} tree
  */
 function parse(string, options) {
@@ -129,33 +133,36 @@ function parse(string, options) {
 }
 ```
 
-### bookmarkText
+#### Parameter
+
+- string
 
 bookmark file string. Merge multiple bookmarks, and repeating, line breaks, indentation, and other formatting will not affect the interpretation.
 
 If you haven't modified the file, the array returned will contain only one object (the root node). If you interpret multiple bookmark files merged together, the function will return an array with multiple objects.
 
 ```js
-const bookmark1 = readFileSync('bookmarks_2019_5_5.html', 'utf-8');
-const bookmark2 = readFileSync('bookmarks_2023_5_9.html', 'utf-8');
-const bookmark3 = bookmark2.replace(/\n/g, '');
+const bookmark0 = readFileSync('bookmarks_2023_5_5.html', 'utf-8');
+const bookmark1 = bookmark0.replace(/\n/g, '');
 
-const tree = bookmark.parse(bookmark1 + bookmark2 + bookmark3);
-
+const tree = bookmark.parse(bookmark0 + bookmark1);
 tree.length;
-// 3
+// 2
 ```
 
-### options
+- options
+
+The following are all the properties.
 
 ```js
 const options = {
     /**
     * Iterate over each node and return a new node.
+    * This function is not the default value. The default value adds several common properties to the node: `{ id, pid, index }`.
     * @param {Object} node The node interpreted from the bookmark file
     * @param {Object} context The context information of the node
-    * @param {Array} context.parentPath The array of parent nodes, for example: [node.parent.parent, node.parent]
-    * @param {Boolean} context.isLeaf Whether the node is a leaf node. You cannot determine this by checking node.children, because when the node is being interpreted, its children have not yet been interpreted.
+    * @param {Array} context.parentPath The array of parent nodes, for example: `[node.parent.parent, node.parent]`
+    * @param {Boolean} context.isLeaf Whether the node is a leaf node. You cannot determine this by checking `node.children`, because when the node is being interpreted, its children have not yet been interpreted.
     * @param {Object} context.index The index of the node in the current array, which may be used to generate a unique ID.
     * @returns {Object} The new node
     */
@@ -164,6 +171,7 @@ const options = {
     },
     /**
      * Set the children of the current node
+     * The default value for the function is as follows
      * @param {Object} node 
      * @param {Array} children 
      */
@@ -173,28 +181,9 @@ const options = {
 };
 ```
 
-## defaultOptions
+#### Custom Usage
 
-Default options.
-
-By default, some contextual properties, such as `id`, will be added to the node object `node`, and the child nodes will be stored in `node.children`.
-
-If you want to customize the configuration but still maintain the system's default features, you can handle it in the following way:
-
-```js
-bookmark.parse(string, {
-    each(node, context) {
-        node.dearFather = lodash.last(context.parentPath);
-        return bookmark.defaultOptions.parse(node, context);
-    }
-});
-```
-
-## Custom Usage
-
-Although there are only two custom options, they provide enough flexibility.
-
-### Custom Node Properties
+- Custom Node Properties
 
 ```js
 bookmark.parse(string, {
@@ -208,7 +197,7 @@ bookmark.parse(string, {
 });
 ```
 
-### Return Different Nodes
+- Return Different Nodes
 
 For example, if you want each node to be a DOM element, you can still achieve that.
 
@@ -251,6 +240,131 @@ ul.appendChild(li);
 document.body.appendChild(ul);
 ```
 
+### stringify()
+
+```js
+/**
+ * Convert a bookmark tree to a bookmark string
+ * @param {Array} tree
+ * @param {Object} options default: `defaultOptions.stringify`
+ * @returns {Array} List of bookmark strings
+ */
+function stringify(tree, options) {
+    return files;
+}
+```
+
+It should be noted that this function returns an array, not a string. The reason is explained in the parameter description below.
+
+#### Parameter
+
+- tree
+
+Bookmark tree, corresponding to the structure returned by `parse()`.
+
+Since `parse()` supports interpreting multiple bookmark files merged together, the array returned by `parse()` represents the root of each bookmark tree. Therefore, the return value of `stringify()` is also an array, and each element of the array is a bookmark file string.
+
+```js
+const bookmark0 = readFileSync('bookmarks_2019_5_5.html', 'utf-8');
+const bookmark1 = readFileSync('bookmarks_2023_5_9.html', 'utf-8');
+// Convert to tree
+const tree = bookmark.parse(bookmark0 + bookmark1, {
+    each(node, context) {
+        // After converting to a tree structure, we usually don't care about the order of properties, but if we need to restore it to a string, we need to include the order of properties.
+        node.attributes = context.attributes;
+        // For example: { name: 'github', href: 'https://github.com/', attributes:[{name: 'href', value: 'https://github.com/'}] }
+        return node;
+    }
+});
+// Restore to string
+const files = bookmark.stringify(tree);
+
+files.length === tree.length;
+// true
+files[0] === bookmark0;
+// true
+files[1] === bookmark1;
+// true
+```
+If the bookmark name contains HTML escape sequences such as `&amp`, the above example may result in `files[0]` not equaling `bookmark0`, but this does not affect the use.
+
+- options
+
+The following are all the properties.
+
+```js
+const options = {
+    /**
+     * Callback function for each node
+     * The default value for the function is as follows
+     * @param {Array} node Bookmark tree node
+     * @param {Array} parentPath The array of parent nodes, for example: `[node.parent.parent, node.parent]`
+     * @returns {Object} Return this object: `{ name, attributes, children }`
+     * @property {number} name Tag name. Required
+     * @property {number} attributes List of attributes, with each element in the array being: `{ name, value }`. Required.
+     * @property {number} [children] If children is an array, it will be converted to an `<H3>` tag regardless of whether the array has elements or not. Otherwise, it will be converted to an `<A>` tag. Optional.
+     */
+    each(node, parentPath) {
+        return node;
+    },
+    // End of Line. The default value is `os.EOL` in the Node.js environment and '\n' in the browser environment.
+    eol: '\n'
+};
+```
+
+#### Custom Usage
+
+```js
+const tree = bookmark.parse(text, {
+    each(node, context) {
+        return {
+            myName: node.name,
+            myAttrs: context.attributes
+        };
+    },
+    setChildren(node, children) {
+        node.myChild = children;
+    }
+});
+
+const files = bookmark.stringify(tree, {
+    each(node) {
+        return {
+            name: node.myName,
+            attributes: node.myAttrs,
+            children: node.myChild, 
+        };
+    }
+});
+
+files[0] === text;
+// true
+```
+
+## defaultOptions
+
+Default options.
+
+```js
+const defaultOptions = {
+    // parse() default options
+    parse: {},
+    // stringify() default options
+    stringify: {}
+};
+```
+
+If you want to keep the system default features after customizing the configuration, you can do it like this.
+
+```js
+bookmark.parse(string, {
+    each(node, context) {
+        node.dearFather = lodash.last(context.parentPath);
+        return bookmark.defaultOptions.parse(node, context);
+    }
+});
+```
+
 ## Test
 
 ### Node.js
@@ -271,7 +385,7 @@ Open this webpage: http://localhost:3000/test/browser
 v2 has been refactored and the API is not complicated. It is recommended to read the documentation again.
 
 - The imported files have changed and need to be distinguished between browser mode and Node.js mode.
-- The entry point has changed, and the module now exports `{ defaultParseOptions, parse }`.
+- The entry point has changed, and the module now exports `{ parse, stringify, defaultOptions }`.
 - The options `name` and `split` have been removed and replaced with `each`.
 - The option `children` has been removed and replaced with `setChildren`.
 
