@@ -16,6 +16,7 @@
     },
     "devDependencies": {
         "@rollup/plugin-terser": "^0.4.1",
+        "eslint": "^8.40.0",
         "mocha": "^10.2.0",
         "rollup": "^3.21.5",
         "serve": "^14.2.0"
@@ -33,7 +34,6 @@
         "url": "https://github.com/zmyjs/netscape-bookmark-tree/issues"
     },
     "dependencies": {
-        "eslint": "^8.40.0",
         "parse5": "^7.1.2"
     },
     "files": [
